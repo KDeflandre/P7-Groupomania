@@ -1,0 +1,174 @@
+body {
+    margin: 0 auto;
+    min-width: 320px;
+    max-width: 1920px;
+  }
+
+.home {
+    display:flex;
+    flex-direction: row-reverse;
+}
+
+.section1 {
+    width: 50%;
+}
+
+.section2 {
+    width: 50%;
+    display:flex;
+    flex-direction: column;
+    padding-top: 20px; 
+    justify-content: center;
+}
+
+#logo img {
+    width: 500px;
+    padding-bottom: 60px;
+    padding-top: 5px;
+    margin: 0 auto;
+    text-align: center;
+}
+
+.connexion {
+    text-align: center;
+    align-items: center;
+    padding:20px;
+}
+
+.login {
+    width:50%;
+    font-size: 1.3rem;
+    height: 3rem;
+    border: solid 1px #333;
+    cursor: pointer;
+} 
+
+.login_box, .register_box {
+    width: 80%;  
+    margin: 0 auto;
+}
+
+.login_box, .register_box h1 {
+    padding-top: 30px;
+} 
+.connexion p {
+    padding: 0px 52px 0 52px ;
+} 
+
+/* .formBox {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+} */
+.formBox h3 {
+    text-align: left;
+    padding-left: 85px;
+    margin-bottom: 10px;
+    display: flex;
+}
+
+h1 {
+    font-size: 2rem;
+    color: #FD2D01;
+    padding-top: 0.5rem;
+}
+
+form input{
+    width: 80%;
+    outline: none;
+    border: 1px solid #FFD7D7;
+    padding: 15px 0;
+    margin-bottom: 20px;
+    border-radius: 10px;
+    text-align: left;
+    padding-left: 15px;
+}
+
+.btnHome {
+    text-align: center;
+    font-size: 1.1rem;
+    margin-top: 15px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    width: 82%;
+    height: 40px;
+    background: #FD2D01;
+    border-radius: 12px;
+    border-color: none;
+    color:white;
+    border: none;
+    cursor: pointer;
+}
+.btnHome:hover {
+    background: #4E5166;
+    color: #FFF;
+    transition: 0.8s;
+}
+
+.btnHome a {
+    color: #FFF;
+}
+.btnHome:hover a {
+    color: #fd2d01;
+    transition: 0.8s;
+}
+a:hover {
+    text-decoration: underline;
+}
+
+.post_text,
+.post_media {
+    font-size: 1rem;
+}
+
+.registerArea {
+    display:flex;
+    justify-content: center;
+    padding-top: 15px;
+}
+.txtRegister {
+    padding-right: 6px;
+}
+
+.signup, .returnLogin {
+    color:#FD2D01;
+    font-weight: bold;
+    cursor:  pointer;
+}
+
+@media screen and (max-width: 1024px) {
+
+    .home {
+        display:flex;
+        flex-direction: initial;
+    }
+   .section1{
+    display: none;
+   }
+
+   .section2 {
+    width: 100%;
+    margin: 0 auto;
+    justify-content: center;
+    align-items: center;
+    display:block;
+   }
+
+   #logo img {
+    width: 300px;
+    padding-bottom: 30px;
+}
+   .connexion {
+    width: auto;
+    margin: auto;
+   }
+
+   .registerArea {
+    display: block;
+   }
+
+   .login__box, .register_box {
+    width: 100%;
+   }
+
+  }
