@@ -1,0 +1,298 @@
+<template>
+ <div class="home">
+    <aside class="section1">
+     <div class="picture">
+       <img src="../assets/Banner-home.png" alt="Logo de l'entreprise groupomania" title="logo groupomania"/>
+    </div>    
+    </aside>
+    <div class="section2">
+         <div class="connexion">
+         <div id="logo">
+            <a href="http://localhost:8080/"> <img src="../assets/Groupomania-ok.png" alt="Logo de l'entreprise groupomania" title="logo groupomania" /></a>
+        </div>
+    <div class='signup'>
+                    <h1>Pour nous rejoindre, complétez votre inscription</h1>
+                    <form class="formBox">
+                        <h3>Nom</h3>
+                        <input type="text" v-model="nom" placeholder="Nom" required>
+                        <h3>Prénom</h3>
+                        <input type="text" v-model="prenom"  placeholder="Prénom" required>
+                        <h3>Email</h3>
+                        <input type="email" v-model="email"  placeholder="Adresse email" required>
+                        <h3>Mot de passe</h3>
+                        <div class="btnPassword">
+                            <input v-if="showPassword" type="text" class="input" v-model="password" placeholder="Mot de Passe" required>
+                            <input v-else type="password" class="input" v-model="password"><button class="buttonP" @click="toggleShow"><span class="icon is-small is-right">
+                            <i class="fa" :class="{ 'fa-eye': showPassword, 'fa-eye-slash': !showPassword }"></i>
+                            </span>
+                            </button>
+                            </div>
+                        <h3>Confirmation du mot de passe</h3>
+                        <input type="password" v-model="password" class="password" placeholder="Confirmation mot de passe" required>
+                        <div v-show="error" class="error">{{ this.errorMsg }}</div>
+                        <input type="submit" @click.prevent="sendFormSignup" class="btnHome" value="Inscription" >
+                    </form>
+                    <div class="registerArea">
+                    <div class="txtRegister">Vous avez déjà un compte ?</div>
+                    <router-link class="returnLogin" :to="{ name: 'Home' }">Se connecter</router-link>
+                    </div>
+                </div>
+                </div>
+                </div>
+                </div>
+</template>
+<script>
+import axios from "axios";
+export default {
+  name: "SignUp",
+  data() {
+    return {
+        // Permet de cacher ou pas le MDP
+      showPassword: false,
+      password: null,
+      //Permet de récupérer la valeur des inputs
+      prenom: "",
+      nom: "",
+      email: "",
+      password: "",
+      //Gestion affichage des erreurs
+      error: null,
+      errorMsg: "",
+    };
+  },
+  computed: {
+    buttonLabel() {
+      return (this.showPassword) ? "Hide" : "Show";
+    }
+  },
+  methods: {
+    toggleShow() {
+      this.showPassword = !this.showPassword;
+    },
+    seePassword() {
+       if(this.type === "password") {
+          this.type = "text";
+          this.btnText = "Hide Password";
+       } else {
+          this.type = "password";
+          this.btnText = "Show Password";
+       }
+        },
+
+    sendFormSignup() {
+      if (this.prenom == "" || this.nom == "" || this.email == "" || this.password == "") {
+        this.error = true; // Si au moins 1 champ est vide on signal une erreur
+        this.errorMsg = "Merci de remplir tous les champs"; //le message d'erreur
+      } else {
+        this.error = false;
+        this.errorMsg = "";
+        axios
+          .post("http://localhost:3000/api/auth/signup", {
+            firstName: this.prenom,
+            lastName: this.nom,
+            email: this.email,
+            userName: this.email,
+            password: this.password,
+          })
+          .then((response) => {
+            this.modalMessage = response.data.message; 
+            this.modalActive = !this.modalActive; 
+            console.log(response.data.message);
+          })
+          .catch((err) => {
+            this.error = true;
+            this.errorMsg = err.response.data.message;
+            console.log(err.response.data.message);
+          });
+      }
+    },
+  },
+};
+
+</script>
+
+<style scoped>
+body {
+    margin: 0 auto;
+    min-width: 320px;
+    max-width: 1920px;
+  }
+.buttonP {
+    background: none;
+    color:#FD2D01;
+    position: absolute;
+    left:780px;
+    top:675px;
+
+}
+.home {
+    display:flex;
+    flex-direction: row-reverse;
+}
+
+.section1 {
+    width: 50%;
+}
+
+.section2 {
+    width: 50%;
+    display:flex;
+    flex-direction: column;
+    padding-top: 20px; 
+    justify-content: center;
+}
+
+#logo img {
+    width: 500px;
+    padding-bottom: 60px;
+    padding-top: 5px;
+    margin: 0 auto;
+    text-align: center;
+}
+
+.connexion {
+    text-align: center;
+    align-items: center;
+    padding:20px;
+}
+
+.login {
+    width:50%;
+    font-size: 1.3rem;
+    height: 3rem;
+    border: solid 1px #333;
+    cursor: pointer;
+} 
+
+.login_box, .register_box {
+    width: 80%;  
+    margin: 0 auto;
+}
+
+.login_box, .register_box h1 {
+    padding-top: 30px;
+} 
+.connexion p {
+    padding: 0px 52px 0 52px ;
+} 
+
+/* .formBox {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+} */
+.formBox h3 {
+    text-align: left;
+    padding-left: 85px;
+    margin-bottom: 10px;
+    display: flex;
+}
+
+h1 {
+    font-size: 2rem;
+    color: #FD2D01;
+    padding-top: 0.5rem;
+}
+
+form input{
+    width: 80%;
+    outline: none;
+    border: 1px solid #FFD7D7;
+    padding: 15px 0;
+    margin-bottom: 20px;
+    border-radius: 10px;
+    text-align: left;
+    padding-left: 15px;
+}
+
+.btnHome {
+    text-align: center;
+    font-size: 1.1rem;
+    margin-top: 15px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    width: 82%;
+    height: 40px;
+    background: #FD2D01;
+    border-radius: 12px;
+    border-color: none;
+    color:white;
+    border: none;
+    cursor: pointer;
+}
+.btnHome:hover {
+    background: #4E5166;
+    color: #FFF;
+    transition: 0.8s;
+}
+
+.btnHome a {
+    color: #FFF;
+}
+.btnHome:hover a {
+    color: #fd2d01;
+    transition: 0.8s;
+}
+a:hover {
+    text-decoration: underline;
+}
+
+.post_text,
+.post_media {
+    font-size: 1rem;
+}
+
+.registerArea {
+    display:flex;
+    justify-content: center;
+    padding-top: 15px;
+}
+.txtRegister {
+    padding-right: 6px;
+    color:black;
+    font-weight: 500;
+}
+
+.signup, .returnLogin {
+    color:#FD2D01;
+    font-weight: bold;
+    cursor:  pointer;
+}
+
+@media screen and (max-width: 1024px) {
+
+    .home {
+        display:flex;
+        flex-direction: initial;
+    }
+   .section1{
+    display: none;
+   }
+
+   .section2 {
+    width: 100%;
+    margin: 0 auto;
+    justify-content: center;
+    align-items: center;
+    display:block;
+   }
+
+   #logo img {
+    width: 300px;
+    padding-bottom: 30px;
+}
+   .connexion {
+    width: auto;
+    margin: auto;
+   }
+
+   .registerArea {
+    display: block;
+   }
+
+   .login__box, .register_box {
+    width: 100%;
+   }
+
+  }
+</style>
