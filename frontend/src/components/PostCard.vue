@@ -2,6 +2,7 @@
   <div>
     <div class="container site">
       <main class="main">
+        <p> test </p>
         <article v-for="publication in publicationsList" :key="publication.id" class="card" :class="{ active: publication === activeItem }">
           <header class="card-header card-header-avatar">
             <img :src="publication.avatar" alt="avatar" width="45" height="45" class="card-avatar" />
@@ -14,16 +15,18 @@
           </header>
           <div class="card-body">
             <!-- Ne s'affiche que si on a un fichier uploadé  -->
-            <div v-if="publication.postUrl">
-              <img :src="publication.postUrl" alt="img posted" class="fullwidth" />
+            <div v-if="publication.imageUrl">
+              <img :src="publication.imageUrl" alt="img posted" class="fullwidth" />
             </div>
-            <p v-show="publication.post">
-              {{ publication.post }}
+            <p v-show="publication.content">
+              {{ publication.content }}
             </p>
           </div>
           <footer class="card-footer">
             <div @click="like"><span class="card-icon">0 like</span></div>
-            <div v-if="userId == publication.UserId || role == 'Administrateur'">
+          <!-- Si l'utilisateur est admin ou si le userId correpsondant à l'UserId de la publication alors on affiche l'icone modifier -->
+
+            <div v-if="userId == publication.userId || role == 'Administrateur'">
               <a class="link" :href="'/publication/edit/' + publication.id"> /><span class="card-icon">Modifier</span></a>
             </div>
           </footer>
@@ -37,77 +40,90 @@
 <script>
 import axios from "axios";
 //ICONS
-import Send from "../assets/Icons/send.svg";
-import Like from "../assets/Icons/like.svg";
-import Edit from "../assets/Icons/edit-regular.svg";
-import Delete from "../assets/Icons/delete.svg";
-
 export default {
   name: "PostCard",
-  components: { Like, Edit, Send, Delete },
   data() {
     return {
-      publicationsList: [],
+     publicationsList: [],
       role: "",
       avatar: "",
-      userId: "",
+      userId: localStorage.getItem("userId"),
       activeItem: null,
-      activePost: null,
+      activeMessage: null,
+      // Pour la modal
+      modalActive: false,
+      modalMessage: "",
+
+      modeMobile: null,
     };
   },
-  computed: {},
+  
+  // computed: {},
+  
   mounted() {
     this.getAllPosts();
-    this.firstName = sessionStorage.getItem("firstName");
-    this.lastName = sessionStorage.getItem("lastName");
-    this.userId = sessionStorage.getItem("userId");
-    this.avatar = sessionStorage.getItem("avatar");
+    this.firstName = localStorage.getItem("firstName");
+    this.lastName = localStorage.getItem("lastName");
+    this.userId = localStorage.getItem("userId");
+    this.avatar = localStorage.getItem("avatar");
   },
   methods: {
     //SELECT 1 ELEMENT
     selectItem(publication) {
       this.activeItem = publication.id;
     },
+
+    checkScreen() {
+      this.windowWidth = window.innerWidth;
+      if (this.windowWidth <= 750) {
+        this.modeMobile = true;
+        return;
+      } else {
+        this.modeMobile = false;
+      }
+      return;
+    },
+
     
     // like() {
     //  
     // },
 
     //EDIT PUBLICATION
-    editPublication(publication) {
-      const userToken = sessionStorage.getItem("token");
-      axios
-        .get("http://localhost:3000/api/posts/" + publication.id 
-        , { headers: { Authorization: "Bearer " + userToken } })
-        .then((res) => {
-          console.log("edit post");
-          console.log(res);
-          this.$router.push({ name: "PostPage" }); //REDIRECT TO FEEDPAGE
-        })
-        .catch(function (error) {
-          console.log(error);
-        });
-    },
+    // editPublication(publication) {
+    //   axios
+    //     .get("http://localhost:3000/api/posts/" + publication.id 
+    //     , { headers: { Authorization: "Bearer " + localStorage.getItem('token') } })
+    //     .then((res) => {
+    //       console.log("edit post");
+    //       console.log(res);
+    //       this.$router.push({ name: "PostPage" }); //REDIRECT TO FEEDPAGE
+    //     })
+    //     .catch(function (error) {
+    //       console.log(error);
+    //     });
+    // },
+
     //Tt les posts
     getAllPosts() {
-      const userToken = sessionStorage.getItem("token");
       axios
         .get("http://localhost:3000/api/posts", {
-          headers: { Authorization: "Bearer " + userToken },
-        })
+          headers: { Authorization: "Bearer " + localStorage.getItem('token') }, })
         .then((response) => {
           this.publicationsList = response.data.ListePosts;
-          this.role = sessionStorage.getItem("role");
-          console.log(sessionStorage.getItem("role"));
-          console.log("all posts");
+          this.role = localStorage.getItem("role");
+          console.log(localStorage.getItem("role"));
+          console.log("response to get all posts");
           console.log(response);
         })
-        .catch((err) => {
-          console.log(err);
+        .catch((error) => {
+          console.log(error);
         });
     },
   },
 };
+
+
 </script>
 
 <style>

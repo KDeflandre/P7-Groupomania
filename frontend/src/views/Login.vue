@@ -1,37 +1,38 @@
 <template>
-     <div class="home">
-    <aside class="section1">
-     <div class="picture">
-       <img src="../assets/Banner-home.png" alt="Logo de l'entreprise groupomania" title="logo groupomania"/>
-    </div>    
-    </aside>
-    <div class="section2">
-         <div class="connexion">
-         <div id="logo">
-            <a href="http://localhost:8080/"> <img src="../assets/Groupomania-ok.png" alt="Logo de l'entreprise groupomania" title="logo groupomania" /></a>
-        </div>
-        
-     <div class=login>
-        <h1>Bienvenue sur votre réseau social d'entreprise</h1>
-            <p>Ce portail a été mis en place pour simplifier la communication au sein de l’entreprise
+    <div class="home">
+        <aside class="section1">
+            <div class="picture">
+                <img src="../assets/Banner-home.png" alt="Logo de l'entreprise groupomania" title="logo groupomania" />
+            </div>
+        </aside>
+        <div class="section2">
+            <div class="connexion">
+                <div id="logo">
+                    <a href="http://localhost:8080/"> <img src="../assets/Groupomania-ok.png"
+                            alt="Logo de l'entreprise groupomania" title="logo groupomania" /></a>
+                </div>
+
+                <div class=login>
+                    <h1>Bienvenue sur votre réseau social d'entreprise</h1>
+                    <p>Ce portail a été mis en place pour simplifier la communication au sein de l’entreprise
                         Groupomania. Pour cela vos devez vous connecter.</p>
-                <form class="formBox">
+                    <form class="formBox">
                         <h3>Email</h3>
                         <input type="email" v-model="email" placeholder="Votre Email">
                         <h3>Mot de passe </h3>
                         <input type="password" v-model="password" placeholder="Mot de Passe">
-                        <input type="submit" @click.prevent="sendFormLogin" class="btnHome" value="Connexion" >
+                        <input type="submit" @click.prevent="sendFormLogin" class="btnHome" value="Connexion">
                     </form>
                     <div class="registerArea">
-                    <div class="txtRegister">Vous n'avez pas de compte ?</div>
-                    <!-- <div class="signup" @click="page = 'signup'">
+                        <div class="txtRegister">Vous n'avez pas de compte ?</div>
+                        <!-- <div class="signup" @click="page = 'signup'">
                         Créer un compte
                     </div> -->
-                    <router-link class="signup" :to="{ name: 'SignUp' }">Créer un compte</router-link>
-                    </div>
+                        <router-link class="signup" :to="{ name: 'SignUp' }">Créer un compte</router-link>
                     </div>
                 </div>
-    </div>
+            </div>
+        </div>
     </div>
 
 </template>
@@ -41,60 +42,44 @@ import Modal from "../components/Modal.vue";
 import axios from "axios";
 
 export default {
-  name: "Login",
-  components: {
-    Modal,
-  },
-  data() {
-    return {
-      email: "",
-      password: "",
-      //ERRORS HANDLER
-      error: null,
-      errorMsg: "",
-      // MODAL
-      modalActive:false,
-      modalMessage:"",
-    };
-  },
-  methods: {
-    //ACTIVER/DESACTIVER MODAL
-    closeModal() {
-      this.modalActive = !this.modalActive;
-      this.email = "";
+    name: "Login",
+    components: {
+        Modal,
     },
-    //Log user
-    sendFormLogin() {
-      if (this.email == "" && this.password == "") {
-        this.error = true;
-        this.errorMsg = "Merci de remplir tous les champs";
-      } else {
-        this.error = false;
-        this.errorMsg = "";
-        axios
-          .post("http://localhost:3000/api/auth/login", {
-            email: this.email,
-            password: this.password,
-          })
-          .then((response) => {
-            sessionStorage.setItem("token", response.data.token);
-            sessionStorage.setItem("userId", response.data.userId);
-            sessionStorage.setItem("userName", response.data.userName);
-            sessionStorage.setItem("firstName", response.data.firstName);
-            sessionStorage.setItem("lastName", response.data.lastName);
-            sessionStorage.setItem("userEmail", response.data.userEmail);
-            sessionStorage.setItem("avatar", response.data.avatar);
-            sessionStorage.setItem("role", response.data.role);
-            console.log(response.data);
-            this.$router.push({ name: "PostPage" }); //REDIRECT
-          })
-          .catch((error) => {
-            this.error = true;
-            this.errorMsg = error.response.data.error;
-          });
-      }
+    data() {
+        return {
+            email: "",
+            password: "",
+            //ERRORS HANDLER
+            error: null,
+            errorMsg: "",
+            // MODAL
+            modalActive: false,
+            modalMessage: "",
+        };
     },
-  },
+    methods: {
+        //ACTIVER/DESACTIVER MODAL
+        closeModal() {
+            this.modalActive = !this.modalActive;
+            this.email = "";
+        },
+        //Log user
+        sendFormLogin() {
+            if (this.email == "" && this.password == "") {
+                this.error = true;
+                this.errorMsg = "Merci de remplir tous les champs";
+            } else {
+                this.error = false;
+                this.errorMsg = "";
+                let data = {
+                    email: this.email,
+                    password: this.password,
+                }
+                this.$store.dispatch("login", data)
+            }
+        },
+    },
 };
 </script>
 

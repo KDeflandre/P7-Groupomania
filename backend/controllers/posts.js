@@ -1,14 +1,41 @@
 const Post = require('../models/Post');
-// const User = require('../models/User');
-// const { post } = require('../routes/post');
+const User = require('../models/User');
 const fs = require('fs');
+
 
 // Tous les messages
 exports.findAllPosts = (req, res, next) => {
-  Post.find()
-  .then(posts => res.status(200).json(posts))
-  .catch(error => res.status(400).json({error}));  
+  Post.findAll({
+    include: {
+      model: User,
+      required: true, 
+      attributes: ["userName", "avatar", "isActive", "firstName", "lastName"],
+    },
+    order: [["id", "DESC"]],
+  })
+    .then((posts) => {
+      const ListePosts = posts.map((post) => {
+        return Object.assign(
+          {},
+          {
+            id: post.id,
+            createdAt: post.createdAt,
+            content: post.content,
+            imageUrl: post.imageUrl,
+            userId: post.UserId,
+            userName: post.User.userName,
+            avatar: post.User.avatar,
+            isActive: post.User.isActive,
+            firstName: post.User.firstName,
+            lastName: post.User.lastName,
+          }
+        );
+      });
+      res.status(200).json({ ListePosts });
+    })
+    .catch((error) => res.status(400).json({ error }));
 };
+
 // Un seul message
 exports.findOnePost = (req, res, next) => {
   Post.findOne({_id: req.params.id})
@@ -18,15 +45,19 @@ exports.findOnePost = (req, res, next) => {
 
 // Créer un post
 exports.createPost = (req, res, next) => {
-  const postObject = JSON.parse(req.body.post);
-  delete postObject._id;
-  const post = new Post({
-      ...postObject,
-      imageUrl: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`,
-  });
+  const postObject = req.body;
+  let newPost = {
+    userId: postObject.userId,
+    content: postObject.content
+  }
+  if (req.file) {
+    newPost.imageUrl = `${req.protocol}://${req.get('host')}/images/${req.file.filename}`
+  }
+
+  const post = new Post(newPost);
   post.save()
-  .then(() => res.status(201).json({message: "Post ajouté"}))
-  .catch(error => res.status(400).json({error}));
+    .then(() => res.status(201).json({ message: "Post ajouté" }))
+    .catch(error => res.status(400).json({ error }));
 };
 
 // Modifier un message
@@ -254,4 +285,3 @@ switch(req.body.like){
 //     .then(() => res.status(200).json({ message: "Message supprimé !" }))
 //     .catch((error) => res.status(400).json({ error }));
 // };
-

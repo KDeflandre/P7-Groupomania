@@ -28,7 +28,7 @@ export default {
 
   mounted() {
     this.getUser();
-    this.avatar = sessionStorage.getItem("avatar");
+    this.avatar = localStorage.getItem("avatar");
   },
   methods: {
     closeModal() {
@@ -39,21 +39,21 @@ export default {
 
     getUser() {
       //Récupération de notre user dans le session storage
-      const userId = sessionStorage.getItem("userId");
-      const userToken = sessionStorage.getItem("token");
+      const userId = localStorage.getItem("userId");
+      if (userId) {
       axios
         .get("http://localhost:3000/api/users/" + userId, {
           headers: {
-            Authorization: "Bearer " + userToken,
-          },
-        })
+            Authorization: "Bearer " + localStorage.getItem('token') }, })
         .then((response) => {
           this.userData = response.data;
           this.firstName = response.data.firstName;
           this.lastName = response.data.lastName;
           this.email = response.data.email;
+          this.role = response.data.role;
         })
         .catch((err) => console.log(err));
+        }
     },
   },
 };

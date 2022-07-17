@@ -1,21 +1,26 @@
 <template>
   <div class="modal">
-    <Modal v-if="modalActive" :modalPost="modalPost" v-on:close-modal="closeModal" />
+    <Modal v-if="modalActive" :modalPost="modalPost" v-on:click="closeModal" />
 
     <div class="main">
-      <a :href="'/publications'"><Close class="icon close" /></a>
+      <a :href="'/Postpage'">
+        <img src="../../public/assets/close.svg" Close class="icon close" />
+      </a>
       <header class="modal-header">
         <h2>Créer une publication</h2>
       </header>
       <section class="modal-body">
-        <img :src="avatar" alt="user-avatar" class="card-avatar" />
-        <textarea v-model="newPost" @input="resize($event)" type="text" :placeholder="`Votre publication`" />
+        <!-- <img :src="avatar" alt="user-avatar" class="card-avatar" /> -->
+        <textarea v-model="newPost" id="content" @input="resize($event)" type="text" :placeholder="`Publication`" />
       </section>
+      
       <section class="modal-file">
         <p>Ajouter une photos</p>
-        <label for="file"> AddImage class="icon" /></label>
-        <input type="file" @change="selectFile" ref="file" id="file" name="image" accept=".jpg, .jpeg, .gif, .png" />
-        <img v-show="postUrl" class="publication-photo" :src="postUrl" alt="picture" />
+        <label for="file">
+          <img src="../../public/assets/image-gallery.svg" class="icon" />
+        </label>
+        <input type="file" @change="selectFile" ref="image" id="image" name="image" accept=".jpg, .jpeg, .gif, .png" />
+        <img v-show="imageUrl" class="publication-photo" :src="imageUrl" alt="picture" />
       </section>
       <footer>
         <button @click="postPublication">Publier</button>
@@ -28,63 +33,71 @@
 <script>
 import axios from "axios";
 import Modal from "../components/Modal.vue";
-import AddImage from "../assets/Icons/image-gallery.svg";
-// import Close from "../assets/";
 export default {
   name: "CreatePost",
   components: 
-  { Modal, AddImage },
-
+  { Modal},
   data() {
     return {
       firstName: "",
       userId: "",
-      role: "",
-      avatar: "",
-      postUrl: "",
+      // role: "",
+      // avatar: "",
+      image:"",
+      imageUrl:"",
+      content: "",
+
       //Gestion affichage des erreurs
       error: null,
       errorMsg: "",
-      newPost: "",
-      file: null,
+      
       modalActive: false,
       modalPost: "",
-      loading: null,
     };
   },
   mounted() {
-    this.firstName = sessionStorage.getItem("firstName");
-    this.userId = sessionStorage.getItem("userId");
-    this.role = sessionStorage.getItem("role");
-    this.avatar = sessionStorage.getItem("avatar");
+    this.firstName = localStorage.getItem("firstName");
+    this.userId = localStorage.getItem("userId");
+    // this.role = localStorage.getItem("role");
+    // this.avatar = localStorage.getItem("avatar");
   },
   methods: {
     //SELECT FILE
     selectFile() {
-      this.file = this.$refs.file.files[0];
-      this.postUrl = URL.createObjectURL(this.file);
+      this.image = this.$refs.image.files[0];
+      this.imageUrl = URL.createObjectURL(this.image);
     },
     //CLOSE MODAL
     closeModal() {
-      this.$emit("close-modal"); //On envoi un emit au store a chaque fois qu'on clique le bouton
+      this.$emit("close-modal"); // emit au store a chaque fois qu'on clique le bouton
     },
-    //RESIZE TEXT AREA
+    // //RESIZE TEXT AREA
     resize(e) {
       e.target.style.height = "auto";
       e.target.style.height = `${e.target.scrollHeight}px`;
     },
     //CREATE PUBLICATION
     postPublication() {
-      const userToken = sessionStorage.getItem("token");
       const formData = new FormData();
-      formData.set("image", this.file);
-      formData.set("UserId", this.userId.toString());
-      formData.set("post", this.newPost.toString());
+      // formData.set("image", this.image);
+      // formData.set("userId", this.userId.toString());
+      // formData.set("content", this.content.toString());
+      // formData.set("title" , this.title.toString());
+
+      formData.append("image", this.image);
+      formData.append("userId", parseInt(localStorage.getItem("userId")));
+      formData.append("content", document.getElementById("content").value);
+
       console.log(formData);
-      if (this.newPost || this.file) {
+      if (formData.get("content") == "null") {
+        this.error = "Vous devez remplir tous les champs";
+      } else {
+      
+      // if ( "content" || "title") {
         axios
           .post("http://localhost:3000/api/posts", formData, {
-            headers: { Authorization: "Bearer " + userToken },
+            headers: { 
+              Authorization: "Bearer " + window.localStorage.getItem('token') },
           })
           .then((response) => {
             this.modalPost = response.data.post; 
@@ -92,15 +105,19 @@ export default {
             console.log("response to postPublication");
             console.log(response.data.post);
             window.location.reload(true);
-            this.closeModal();
-          });
-      } else {
-        this.error = true; // Si au moins 1 champ est vide on signal une erreur
-        this.errorMsg = "Merci de publier au moins un message ou une image"; //le message d'erreur
+            // this.closeModal();
+          })
+          .catch(error => (this.error = error )); 
       }
-    },
-  },
-};
+    }}}
+      // } else {
+      //    this.error = true; // Si au moins 1 champ est vide on signal une erreur
+      //   this.errorMsg = "Merci de publier au moins un message ou une image"; //le message d'erreur
+      // }
+      // },
+    // },
+  // }
+
 </script>
 
 <style scoped>

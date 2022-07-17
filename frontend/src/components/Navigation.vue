@@ -6,11 +6,12 @@
       </div>
       <div class="nav-links">
         <button> 
-            <router-link class="link" :to="{ name: 'PostPage' }">Créer une publication</router-link>
-            </button>
-          <router-link v-if="!userData" class="link" :to="{ name: 'Home' }">Se déconnecter</router-link>
-       
-        <div v-if="userData" @click="toggleProfileMenu" class="profile" ref="profile">
+            <router-link class="link" :to="{ name: 'PostPage' }">Créer une publication </router-link>
+        </button>
+          <div class="Logout" v-if="$store.getters.isLogged" @click="signOut">Se déconnecter </div>
+      
+      
+        <!-- <div v-if="userData" @click="toggleProfileMenu" class="profile" ref="profile">
           <span>{{ userInitials }}</span>
           <div v-show="profileMenu" class="profile-menu">
             <div class="info">
@@ -33,15 +34,14 @@
                   <p>Admin</p>
                 </router-link>
               </div>
-            </div>
-            <div class="options">
+            </div> -->
+            <!-- <div class="options">
               <div @click="signOut" class="option">
-                <!-- < class="icon" /> ajouter icon pour signOut -->
                 <p>Déconnexion</p>
-              </div>
-            </div>
-          </div>
-        </div>
+              </div> -->
+            <!-- </div> -->
+          <!-- </div>
+        </div> -->
       </div>
     </nav>
  
@@ -72,27 +72,28 @@ export default {
       return this.currentUser;
     },
   },
-  methods: {  
+  methods: {
     // deconnexion
     signOut() {
-      sessionStorage.clear();
-      location.href = "/";
+      this.$store.dispatch("logout")
     },
-    
+
     getUser() {
       //Récup user in session storage
-      const userId = sessionStorage.getItem("userId");
-      const userToken = sessionStorage.getItem("token");
+      const userId = localStorage.getItem("userId");
       if (userId) {
         axios
-          .get("http://localhost:3000/api/users/" + userId, { headers: { Authorization: "Bearer " + localStorage.getItem('token') },})
+          .get("http://localhost:3000/api/users/" + userId, { 
+            headers: { 
+              Authorization: "Bearer " + localStorage.getItem('token') }, })
           .then((response) => {
             this.userData = response.data;
             this.firstName = response.data.firstName;
             this.lastName = response.data.lastName;
             this.email = response.data.email;
             this.role = response.data.role;
-            sessionStorage.setItem("role", response.data.role);
+            localStorage.setItem("role", response.data.role);
+
             console.log("response getUser");
             console.log(response.data);
           })

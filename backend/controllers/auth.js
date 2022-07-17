@@ -5,6 +5,10 @@ const jwt = require("jsonwebtoken");
 
 // Creation d'un nouvel utilisateur
 exports.signup = (req, res, next) => {
+  if (!req.body.password || !req.body.email || !req.body.firstName || !req.body.lastName) return res.status(500).json({ error: "Champs manquants" })
+  // if (!req.body.password.match(/^[Az\d]{5,20}$/g)) return res.status(500).json({ error: "Format de password incorrect" })
+  if (!req.body.email.match(/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/g)) return res.status(500).json({ error: "Format de l'email incorrect" })
+
   bcrypt.hash(req.body.password, 10)
     .then(hash => {
       const user = new User({
@@ -14,9 +18,21 @@ exports.signup = (req, res, next) => {
         email: req.body.email,
         password: hash
       });
-    user.save()
-        .then(() => res.status(201).json({ message: "Votre compte a été enregistré avec succès!" }))
-        .catch((error) => res.status(401).json({ error }));
+      user.save()
+      .then((user) => res.status(200).json({
+        message: "Utilisateur connecté !",
+        user: {
+          userId: user._id,
+          role: user.isAdmin,
+          userName: user.userName,
+          firstName: user.firstName,
+          lastName: user.lastName,
+          userEmail: user.email,
+          avatar: user.avatar,
+        },
+        token: jwt.sign({ userId: user._id }, process.env.TOKEN, { expiresIn: "24h" })
+      }))
+      .catch((error) => res.status(401).json({ error }));
     })
     .catch((error) => res.status(500).json({ error }));
 };
@@ -24,8 +40,8 @@ exports.signup = (req, res, next) => {
 // Connexion d'un utilisateur
 exports.login = (req, res, next) => {
   User.findOne({ email: req.body.email })
-    .then((users) => {
-      if (!users) {
+    .then((user) => {
+      if (!user) {
         return res.status(404).json({ error: "Utilisateur non trouvé !" });
       }
       bcrypt.compare(req.body.password, user.password)
@@ -35,17 +51,22 @@ exports.login = (req, res, next) => {
           }
           res.status(200).json({
             message: "Utilisateur connecté !",
-            userId: users._id,
-            role: users.isAdmin,
-            userName: users.userName,
-            firstName: users.firstName,
-            lastName: users.lastName,
-            userEmail: users.email,
-            avatar: users.avatar,
-            token: jwt.sign({ userId: users._id }, process.env.TOKEN, { expiresIn: "24h" })
+            user: {
+              userId: user._id,
+              role: user.isAdmin,
+              userName: user.userName,
+              firstName: user.firstName,
+              lastName: user.lastName,
+              email: user.email,
+              avatar: user.avatar,
+            },
+            token: jwt.sign({ userId: user._id }, process.env.TOKEN, { expiresIn: "24h" })
           });
         })
         .catch((error) => res.status(501).json({ error }));
     })
-    .catch((error) => res.status(502).json({ error }));
+    .catch((error) => {
+      console.log(error)
+      res.status(502).json({ error })
+    });
 };

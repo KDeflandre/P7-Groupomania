@@ -1,112 +1,109 @@
 <template>
- <div class="home">
-    <aside class="section1">
-     <div class="picture">
-       <img src="../assets/Banner-home.png" alt="Logo de l'entreprise groupomania" title="logo groupomania"/>
-    </div>    
-    </aside>
-    <div class="section2">
-         <div class="connexion">
-         <div id="logo">
-            <a href="http://localhost:8080/"> <img src="../assets/Groupomania-ok.png" alt="Logo de l'entreprise groupomania" title="logo groupomania" /></a>
-        </div>
-    <div class='signup'>
+    <div class="home">
+        <aside class="section1">
+            <div class="picture">
+                <img src="../assets/Banner-home.png" alt="Logo de l'entreprise groupomania" title="logo groupomania" />
+            </div>
+        </aside>
+        <div class="section2">
+            <div class="connexion">
+                <div id="logo">
+                    <a href="http://localhost:8080/"> <img src="../assets/Groupomania-ok.png"
+                            alt="Logo de l'entreprise groupomania" title="logo groupomania" /></a>
+                </div>
+                <div class='signup'>
                     <h1>Pour nous rejoindre, complétez votre inscription</h1>
                     <form class="formBox">
                         <h3>Nom</h3>
                         <input type="text" v-model="nom" placeholder="Nom" required>
                         <h3>Prénom</h3>
-                        <input type="text" v-model="prenom"  placeholder="Prénom" required>
+                        <input type="text" v-model="prenom" placeholder="Prénom" required>
                         <h3>Email</h3>
-                        <input type="email" v-model="email"  placeholder="Adresse email" required>
-                        <h3>Mot de passe</h3>
+                        <input type="email" v-model="email" placeholder="Adresse email" required>
+                        
                         <div class="btnPassword">
-                            <input v-if="showPassword" type="text" class="input" v-model="password" placeholder="Mot de Passe" required>
-                            <input v-else type="password" class="input" v-model="password"><button class="buttonP" @click="toggleShow"><span class="icon is-small is-right">
-                            <i class="fa" :class="{ 'fa-eye': showPassword, 'fa-eye-slash': !showPassword }"></i>
-                            </span>
-                            </button>
-                            </div>
+                            <label for="password">Mot de passe</label>
+                            <input :type="showPassword ? 'text' : 'password'" class="input" name="password"
+                                v-model="password" placeholder="Mot de passe" required>
+                                <span class="icon is-small is-right">
+                                    <i class="fa"
+                                        :class="{ 'fa-eye': showPassword, 'fa-eye-slash': !showPassword }"></i>
+                                </span>
+                        </div>
                         <h3>Confirmation du mot de passe</h3>
-                        <input type="password" v-model="password" class="password" placeholder="Confirmation mot de passe" required>
+                        <input type="password" v-model="password2" class="password"
+                            placeholder="Confirmation mot de passe" required>
                         <div v-show="error" class="error">{{ this.errorMsg }}</div>
-                        <input type="submit" @click.prevent="sendFormSignup" class="btnHome" value="Inscription" >
+                        <input type="submit" @click.prevent="sendFormSignup" class="btnHome" value="Inscription">
                     </form>
                     <div class="registerArea">
-                    <div class="txtRegister">Vous avez déjà un compte ?</div>
-                    <router-link class="returnLogin" :to="{ name: 'Home' }">Se connecter</router-link>
+                        <div class="txtRegister">Vous avez déjà un compte ?</div>
+                        <router-link class="returnLogin" :to="{ name: 'Home' }">Se connecter</router-link>
                     </div>
                 </div>
-                </div>
-                </div>
-                </div>
+            </div>
+        </div>
+    </div>
 </template>
 <script>
 import axios from "axios";
 export default {
-  name: "SignUp",
-  data() {
-    return {
-        // Permet de cacher ou pas le MDP
-      showPassword: false,
-      password: null,
-      //Permet de récupérer la valeur des inputs
-      prenom: "",
-      nom: "",
-      email: "",
-      password: "",
-      //Gestion affichage des erreurs
-      error: null,
-      errorMsg: "",
-    };
-  },
-  computed: {
-    buttonLabel() {
-      return (this.showPassword) ? "Hide" : "Show";
-    }
-  },
-  methods: {
-    toggleShow() {
-      this.showPassword = !this.showPassword;
+    name: "SignUp",
+    data() {
+        return {
+            // Permet de cacher ou pas le MDP
+            showPassword: false,
+            password: null,
+            //Permet de récupérer la valeur des inputs
+            prenom: "",
+            nom: "",
+            email: "",
+            password: "",
+            //Gestion affichage des erreurs
+            error: null,
+            errorMsg: "",
+        };
     },
-    seePassword() {
-       if(this.type === "password") {
-          this.type = "text";
-          this.btnText = "Hide Password";
-       } else {
-          this.type = "password";
-          this.btnText = "Show Password";
-       }
+    computed: {
+        buttonLabel() {
+            return (this.showPassword) ? "Hide" : "Show";
+        }
+    },
+    methods: {
+        toggleShow() {
+            this.showPassword = !this.showPassword;
+        },
+        seePassword() {
+            if (this.type === "password") {
+                this.type = "text";
+                this.btnText = "Hide Password";
+            } else {
+                this.type = "password";
+                this.btnText = "Show Password";
+            }
         },
 
-    sendFormSignup() {
-      if (this.prenom == "" || this.nom == "" || this.email == "" || this.password == "") {
-        this.error = true; // Si au moins 1 champ est vide on signal une erreur
-        this.errorMsg = "Merci de remplir tous les champs"; //le message d'erreur
-      } else {
-        this.error = false;
-        this.errorMsg = "";
-        axios
-          .post("http://localhost:3000/api/auth/signup", {
-            firstName: this.prenom,
-            lastName: this.nom,
-            email: this.email,
-            userName: this.email,
-            password: this.password,
-          })
-          .then((response) => {
-            this.modalMessage = response.data.message; 
-            this.modalActive = !this.modalActive; 
-            console.log(response.data.message);
-          })
-          .catch((err) => {
-            this.error = true;
-            this.errorMsg = err.response.data.message;
-            console.log(err.response.data.message);
-          });
-      }
+        sendFormSignup() {
+            if (this.prenom == "" || this.nom == "" || this.email == "" || this.password == "") {
+                this.error = true; // Si au moins 1 champ est vide on signal une erreur
+                this.errorMsg = "Merci de remplir tous les champs"; //le message d'erreur
+            } else if (this.password !== this.password2) {
+                this.error = true; 
+                this.errorMsg = "Les mots de passe ne sont pas indentiques"; 
+            } else {
+                this.error = false;
+                this.errorMsg = "";
+                let data = {
+                    firstName: this.prenom,
+                    lastName: this.nom,
+                    email: this.email,
+                    userName: this.email,
+                    password: this.password,
+                }
+                this.$store.dispatch('signup', data)
+            }
+        },
     },
-  },
 };
 
 </script>
