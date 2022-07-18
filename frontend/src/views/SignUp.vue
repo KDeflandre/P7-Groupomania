@@ -22,14 +22,16 @@
                         <input type="email" v-model="email" placeholder="Adresse email" required>
                         
                         <div class="btnPassword">
-                            <label for="password">Mot de passe</label>
+                            <label for="password"> <h3> Mot de passe</h3> </label>
                             <input :type="showPassword ? 'text' : 'password'" class="input" name="password"
                                 v-model="password" placeholder="Mot de passe" required>
+                                <span class="buttonTxt" @click="toggleShow">
                                 <span class="icon is-small is-right">
-                                    <i class="fa"
-                                        :class="{ 'fa-eye': showPassword, 'fa-eye-slash': !showPassword }"></i>
+                                    <i class="fa" :class="{ 'fa-eye-slash': !showPassword, 'fa-eye': showPassword }"></i>
+                                </span>
                                 </span>
                         </div>
+                        
                         <h3>Confirmation du mot de passe</h3>
                         <input type="password" v-model="password2" class="password"
                             placeholder="Confirmation mot de passe" required>
@@ -54,6 +56,7 @@ export default {
             // Permet de cacher ou pas le MDP
             showPassword: false,
             password: null,
+            password2:null,
             //Permet de récupérer la valeur des inputs
             prenom: "",
             nom: "",
@@ -73,15 +76,15 @@ export default {
         toggleShow() {
             this.showPassword = !this.showPassword;
         },
-        seePassword() {
-            if (this.type === "password") {
-                this.type = "text";
-                this.btnText = "Hide Password";
-            } else {
-                this.type = "password";
-                this.btnText = "Show Password";
-            }
-        },
+        // seePassword() {
+        //     if (this.type === "password") {
+        //         this.type = "text";
+        //         this.btnTxt = "Hide Password";
+        //     } else {
+        //         this.type = "password";
+        //         this.btnTxt = "Show Password";
+        //     }
+        // },
 
         sendFormSignup() {
             if (this.prenom == "" || this.nom == "" || this.email == "" || this.password == "") {
@@ -120,7 +123,21 @@ body {
     position: absolute;
     left:780px;
     top:675px;
-
+    right: 0;
+    bottom: 0;
+}
+.btnPassword {
+    position:relative;
+}
+label.password {
+    display:block;
+}
+.buttonTxt {
+    right: 0;
+    bottom: 0;
+    left:650px;
+    top: 47px;
+    position: absolute;
 }
 .home {
     display:flex;
