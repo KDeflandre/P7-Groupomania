@@ -27,7 +27,7 @@ exports.signup = (req, res, next) => {
           userName: user.userName,
           firstName: user.firstName,
           lastName: user.lastName,
-          userEmail: user.email,
+          email: user.email,
           avatar: user.avatar,
         },
         token: jwt.sign({ userId: user._id }, process.env.TOKEN, { expiresIn: "24h" })
@@ -40,7 +40,7 @@ exports.signup = (req, res, next) => {
 // Connexion d'un utilisateur
 exports.login = (req, res, next) => {
   User.findOne({ email: req.body.email })
-    .then((user) => {
+    .then(user => {
       if (!user) {
         return res.status(404).json({ error: "Utilisateur non trouvé !" });
       }

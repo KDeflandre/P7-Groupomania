@@ -31,7 +31,7 @@
 <script>
 import axios from "axios";
 //COMPONENTS
-import Modal from "../components/Modal";
+import Modal from "../components/Modal.vue";
 //ICONS
 // import AdminIcon from "../assets/Icons/user-crown-light.svg";
 // import Trash from "../assets/Icons/delete_forever.svg";
@@ -43,8 +43,7 @@ export default {
   data() {
     return {
       modalPost: "Changement effectué!",
-      modalActive: null,
-      loading: null,
+      modalActive: null,,
       userData: "",
       userInitials: "",
       //On pré-remplit les inputs avec les info de l'user
@@ -56,19 +55,19 @@ export default {
   },
   mounted() {
     this.getUser();
-    this.role = sessionStorage.getItem("role");
+    this.role = localStorage.getItem("role");
   },
   methods: {
     closeModal() {
       this.modalActive = !this.modalActive;
       if (this.modalPost == "Le compte a bien été supprimé !") {
-        this.$router.push({ name: "Accueil" });
+        this.$router.push({ name: "PostPage" });
       }
       window.location.reload(true);
     },
     updateProfile() {
-      const userId = sessionStorage.getItem("userId");
-      const userToken = sessionStorage.getItem("token");
+      const userId = localStorage.getItem("userId");
+      const userToken = localStorage.getItem("token");
       axios
         .put(
           "http://localhost:3000/api/users/" + userId,
@@ -92,9 +91,9 @@ export default {
         });
     },
     getUser() {
-      //Récupération de notre user dans le session storage
-      const userId = sessionStorage.getItem("userId");
-      const userToken = sessionStorage.getItem("token");
+      //Récupération de notre user dans le localstorage
+      const userId = localStorage.getItem("userId");
+      const userToken = localStorage.getItem("token");
       axios
         .get("http://localhost:3000/api/users/" + userId, {
           headers: {
@@ -119,9 +118,8 @@ export default {
     },
     //DELETE USER
     deleteUser() {
-      const userId = sessionStorage.getItem("userId");
-      const userToken = sessionStorage.getItem("token");
-      this.loading = true; // Activation du spinner "loading"
+      const userId = localStorage.getItem("userId");
+      const userToken = localStorage.getItem("token");
       axios
         .delete("http://localhost:3000/api/users/" + userId, {
           headers: {
@@ -129,8 +127,7 @@ export default {
           },
         })
         .then((response) => {
-          sessionStorage.clear();
-          this.loading = false; //On eteint le spinner "loading"
+          localStorage.clear();
           this.modalPost = response.data.modalPost; //On recup le message du back
           this.modalActive = !this.modalActive; //On active la modal
           console.log(response.data.post);

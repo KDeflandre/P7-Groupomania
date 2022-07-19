@@ -25,7 +25,7 @@ export default {
   },
   data() {
     return {
-      userId: sessionStorage.getItem("userId"),
+      userId: localStorage.getItem("userId"),
     };
   },
 };

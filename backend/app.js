@@ -14,7 +14,7 @@ const userRoutes = require("./routes/user");
 const authRoutes = require("./routes/auth");
 const postRoutes = require("./routes/post");
 
-// Connexion à MongaDB
+// Connexion à MongoDB
 mongoose.connect('mongodb+srv://adminK:mVKHz7kyNFEnGfaJ@groupomania.4hpuk.mongodb.net/?retryWrites=true&w=majority',
   { useNewUrlParser: true,
     useUnifiedTopology: true })

@@ -79,7 +79,7 @@ export default {
     },
 
     getUser() {
-      //Récup user in session storage
+      //Récup user in localstorage
       const userId = localStorage.getItem("userId");
       if (userId) {
         axios
@@ -137,7 +137,6 @@ header nav .branding {
   align-items: center;
 }
 header nav .branding .header {
-  width: 200px;
   font-weight: 600;
   font-size: 24px;
   color: #000;

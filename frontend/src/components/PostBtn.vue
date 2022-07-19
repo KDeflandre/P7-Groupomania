@@ -9,6 +9,7 @@
 
 <script>
 import axios from "axios";
+import { mapState } from "vuex";
 import CreatePost from "./CreatePost.vue";
 
 export default {
@@ -16,7 +17,6 @@ export default {
     components: { CreatePost },
   data() {
   return {
-      //USER DATA
       firstName: "",
       avatar: "",
       //FONCTIONNALITY
@@ -27,36 +27,40 @@ export default {
   created: function () {},
 
   mounted() {
-    this.getUser();
+    // this.getUser();
     this.avatar = localStorage.getItem("avatar");
+    this.$store.dispatch("getUserInfos");
+
   },
+
+  // computed: {
+  //   ...mapState(["user"])
+  // },
+
   methods: {
     closeModal() {
       this.modalActive = !this.modalActive;
       this.email = "";
-      this.loading = false;
     },
-
-    getUser() {
-      //Récupération de notre user dans le session storage
-      const userId = localStorage.getItem("userId");
-      if (userId) {
-      axios
-        .get("http://localhost:3000/api/users/" + userId, {
-          headers: {
-            Authorization: "Bearer " + localStorage.getItem('token') }, })
-        .then((response) => {
-          this.userData = response.data;
-          this.firstName = response.data.firstName;
-          this.lastName = response.data.lastName;
-          this.email = response.data.email;
-          this.role = response.data.role;
-        })
-        .catch((err) => console.log(err));
-        }
+  
+    // getUser() {
+    //   //Récupération de notre user dans le local storage
+    //   const userId = localStorage.getItem("userId");
+    //   axios
+    //     .get("http://localhost:3000/api/users/" + parseInt(localStorage.getItem("userId")), {
+    //       headers: {
+    //         Authorization: "Bearer " + localStorage.getItem('token') }, })
+    //     .then((response) => {
+    //       this.userData = response.data;
+    //       this.firstName = response.data.firstName;
+    //       this.lastName = response.data.lastName;
+    //       this.email = response.data.email;
+    //     })
+    //     .catch((err) => console.log(err));
+    //     }
     },
-  },
-};
+  };
+// };
 </script>
 
 <style scoped>

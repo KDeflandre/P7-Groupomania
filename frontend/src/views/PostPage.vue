@@ -1,12 +1,13 @@
 <template>
   <div class="container site">
-    <main v-if="userId" class="main">
+    <!-- <main v-if="userId" class="main"> -->
+      <main class="main">
       <PostBtn />
 
       <PostCard />
     </main>
 
-    <main v-if="!userId">Vous devez être connecté</main>
+    <!-- <main v-if="!userId" class="main">Vous devez être connecté </main> -->
     
   </div>
 </template>
@@ -20,7 +21,7 @@ export default {
   components: { PostCard, PostBtn },
   data() {
     return {
-      userId: "",
+      userId: localStorage.getItem("userId"),
     };
   },
   computed: {
@@ -30,7 +31,7 @@ export default {
     },
   },
   mounted() {
-    this.userId = sessionStorage.getItem("userId");
+    this.userId = localStorage.getItem("userId");
   },
 };
 </script>

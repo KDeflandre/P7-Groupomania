@@ -21,6 +21,7 @@
                         <input type="email" v-model="email" placeholder="Votre Email">
                         <h3>Mot de passe </h3>
                         <input type="password" v-model="password" placeholder="Mot de Passe">
+                        <div v-show="error" class="error">{{ this.errorMsg }}</div>
                         <input type="submit" @click.prevent="sendFormLogin" class="btnHome" value="Connexion">
                     </form>
                     <div class="registerArea">
@@ -67,6 +68,9 @@ export default {
         //Log user
         sendFormLogin() {
             if (this.email == "" && this.password == "") {
+                this.error = true;
+                this.errorMsg = "Merci de remplir tous les champs"; 
+            } else if  (this.email == "" || this.password == "") {
                 this.error = true;
                 this.errorMsg = "Merci de remplir tous les champs";
             } else {

@@ -48,8 +48,11 @@ export default {
       role: "",
       avatar: "",
       userId: localStorage.getItem("userId"),
+      token: localStorage.getItem("token"),
       activeItem: null,
-      activeMessage: null,
+      activePost: null,
+      publication:{},
+      publicationsList:[],
       // Pour la modal
       modalActive: false,
       modalMessage: "",
@@ -57,14 +60,12 @@ export default {
       modeMobile: null,
     };
   },
-  
   // computed: {},
   
   mounted() {
     this.getAllPosts();
     this.firstName = localStorage.getItem("firstName");
     this.lastName = localStorage.getItem("lastName");
-    this.userId = localStorage.getItem("userId");
     this.avatar = localStorage.getItem("avatar");
   },
   methods: {
@@ -103,23 +104,44 @@ export default {
     //       console.log(error);
     //     });
     // },
+getAllPosts(){
+     //Récupération de notre user dans le local storage
+      const userId = localStorage.getItem("userId");
+      if (userId) {
+        axios
+      .get("http://localhost:3000/api/posts", {
+        headers: {
+          Authorization: "Bearer " + localStorage.getItem('token'),
+          "Content-Type": "application/json",
+        },
+      })
+      .then((response) => {
+        this.publicationsList = response.data.publicationsList;
+        console.log(this.publicationsList);
+      })
+      .catch(function(error) {
+        alert(error);
+        console.log(error);
+      });
+}
+}
 
-    //Tt les posts
-    getAllPosts() {
-      axios
-        .get("http://localhost:3000/api/posts", {
-          headers: { Authorization: "Bearer " + localStorage.getItem('token') }, })
-        .then((response) => {
-          this.publicationsList = response.data.ListePosts;
-          this.role = localStorage.getItem("role");
-          console.log(localStorage.getItem("role"));
-          console.log("response to get all posts");
-          console.log(response);
-        })
-        .catch((error) => {
-          console.log(error);
-        });
-    },
+    // //Tt les posts
+    // getAllPosts() {
+    //   axios
+    //     .get("http://localhost:3000/api/posts", {
+    //       headers: { Authorization: "Bearer " + localStorage.getItem('token') }, })
+    //     .then((response) => {
+    //       this.publicationsList = response.data.ListePosts;
+    //       this.role = localStorage.getItem("role");
+    //       console.log(localStorage.getItem("role"));
+    //       console.log("response to get all posts");
+    //       console.log(response);
+    //     })
+    //     .catch((error) => {
+    //       console.log(error);
+    //     });
+    // },
   },
 };
 

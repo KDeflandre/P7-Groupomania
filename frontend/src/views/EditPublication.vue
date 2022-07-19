@@ -1,7 +1,6 @@
 <template>
   <div class="modal">
     <Modal v-if="modalActive" :modalPost="modalPost" v-on:close-modal="closeModal" />
-    <Loading v-if="loading" />
     <div class="main">
       <a :href="'/publications'"><Close class="icon close" /></a>
 
@@ -44,17 +43,16 @@ export default {
       editedPost: "",
       editedPostUrl: "",
       file: null,
-    //   modalActive: false,
-    //   modalMessage: "",
-    //   loading: null,
+      modalActive: false,
+      modalMessage: "",
     };
   },
   mounted() {
     this.getPostData();
-    this.firstName = sessionStorage.getItem("firstName");
-    this.userId = sessionStorage.getItem("userId");
-    this.role = sessionStorage.getItem("role");
-    this.avatar = sessionStorage.getItem("avatar");
+    this.firstName = localStorage.getItem("firstName");
+    this.userId = localStorage.getItem("userId");
+    this.role = localStorage.getItem("role");
+    this.avatar = localStorage.getItem("avatar");
   },
   methods: {
     //CLOSE MODAL
@@ -76,7 +74,7 @@ export default {
     getPostData() {
       axios
         .get("http://127.0.0.1:3000/api/posts/" + this.$route.params.id, {
-          headers: { Authorization: "Bearer " + sessionStorage.getItem("token") },
+          headers: { Authorization: "Bearer " + localStorage.getItem("token") },
         })
         .then((res) => {
           this.editedPost = res.data.post;
@@ -90,7 +88,7 @@ export default {
     },
     //UPDATE THE PUBLICATION
     updatePublication() {
-      const userToken = sessionStorage.getItem("token");
+      const userToken = localStorage.getItem("token");
       const formData = new FormData();
       formData.append("post", this.editedPost.toString());
       formData.append("image", this.file);
@@ -103,7 +101,6 @@ export default {
           headers: { Authorization: "Bearer " + userToken },
         })
         .then((response) => {
-          this.loading = false; //On eteint le spinner "loading"
           this.modalPost = response.data.post; //On recup le message du back
           this.modalActive = !this.modalActive; //On active la modal
           console.log("response to updatePublication");
@@ -116,7 +113,7 @@ export default {
     deletePublication() {
       axios
         .delete("http://127.0.0.1:3000/api/posts/" + this.$route.params.id, {
-          headers: { Authorization: "Bearer " + sessionStorage.getItem("token") },
+          headers: { Authorization: "Bearer " + localStorage.getItem("token") },
         })
         .then((response) => {
           this.modalPost = response.data.post; //On recup le message du back

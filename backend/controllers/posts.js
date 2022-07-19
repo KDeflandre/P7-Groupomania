@@ -2,8 +2,27 @@ const Post = require('../models/Post');
 const User = require('../models/User');
 const fs = require('fs');
 
+// /***  Afficher les posts ***/
+// exports.findAllPosts = (req, res, next) => {
+//   /*** on récupère tous les posts ***/
+//   Post.findAll({
+//           include: [{
+//               model: User,
+//               attributes: ["userName", "avatar", "isActive", "firstName", "lastName"]
+//           }],
+//       })
+//       /*** si tout est ok ***/
+//       .then(publicationList => res.status(200).json({
+//           publicationList
+//       }))
+//       /*** sinon on envoie une erreur ***/
+//       .catch(error => res.status(400).json({
+//           error
+//       }))
 
-// Tous les messages
+// };
+
+//Tous les messages
 exports.findAllPosts = (req, res, next) => {
   Post.findAll({
     include: {
@@ -43,12 +62,11 @@ exports.findOnePost = (req, res, next) => {
   .catch(error => res.status(400).json({error}));  
 };
 
-// Créer un post
 exports.createPost = (req, res, next) => {
   const postObject = req.body;
   let newPost = {
     userId: postObject.userId,
-    content: postObject.content
+    post: postObject.post
   }
   if (req.file) {
     newPost.imageUrl = `${req.protocol}://${req.get('host')}/images/${req.file.filename}`
@@ -59,6 +77,7 @@ exports.createPost = (req, res, next) => {
     .then(() => res.status(201).json({ message: "Post ajouté" }))
     .catch(error => res.status(400).json({ error }));
 };
+
 
 // Modifier un message
 exports.modifyPost = (req, res ,next) => {

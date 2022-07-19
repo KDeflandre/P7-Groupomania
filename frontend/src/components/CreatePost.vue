@@ -11,7 +11,7 @@
       </header>
       <section class="modal-body">
         <!-- <img :src="avatar" alt="user-avatar" class="card-avatar" /> -->
-        <textarea v-model="newPost" id="content" @input="resize($event)" type="text" :placeholder="`Publication`" />
+        <textarea v-model="newPost" id="post" @input="resize($event)" type="text" :placeholder="`Publication`" />
       </section>
       
       <section class="modal-file">
@@ -41,15 +41,16 @@ export default {
     return {
       firstName: "",
       userId: "",
-      // role: "",
-      // avatar: "",
-      image:"",
+      role: "",
+      avatar: "",
       imageUrl:"",
-      content: "",
 
       //Gestion affichage des erreurs
       error: null,
       errorMsg: "",
+
+      newPost:"",
+      file:null,
       
       modalActive: false,
       modalPost: "",
@@ -58,15 +59,16 @@ export default {
   mounted() {
     this.firstName = localStorage.getItem("firstName");
     this.userId = localStorage.getItem("userId");
-    // this.role = localStorage.getItem("role");
-    // this.avatar = localStorage.getItem("avatar");
+    this.role = localStorage.getItem("role");
+    this.avatar = localStorage.getItem("avatar");
   },
   methods: {
-    //SELECT FILE
+   //SELECT FILE
     selectFile() {
       this.image = this.$refs.image.files[0];
       this.imageUrl = URL.createObjectURL(this.image);
     },
+
     //CLOSE MODAL
     closeModal() {
       this.$emit("close-modal"); // emit au store a chaque fois qu'on clique le bouton
@@ -76,24 +78,19 @@ export default {
       e.target.style.height = "auto";
       e.target.style.height = `${e.target.scrollHeight}px`;
     },
+
+
     //CREATE PUBLICATION
     postPublication() {
       const formData = new FormData();
-      // formData.set("image", this.image);
-      // formData.set("userId", this.userId.toString());
-      // formData.set("content", this.content.toString());
-      // formData.set("title" , this.title.toString());
-
       formData.append("image", this.image);
       formData.append("userId", parseInt(localStorage.getItem("userId")));
-      formData.append("content", document.getElementById("content").value);
+      formData.append("post", document.getElementById("post").value);
 
       console.log(formData);
-      if (formData.get("content") == "null") {
+      if (formData.get("post") == "null") {
         this.error = "Vous devez remplir tous les champs";
       } else {
-      
-      // if ( "content" || "title") {
         axios
           .post("http://localhost:3000/api/posts", formData, {
             headers: { 
@@ -105,18 +102,12 @@ export default {
             console.log("response to postPublication");
             console.log(response.data.post);
             window.location.reload(true);
-            // this.closeModal();
+            
           })
           .catch(error => (this.error = error )); 
       }
     }}}
-      // } else {
-      //    this.error = true; // Si au moins 1 champ est vide on signal une erreur
-      //   this.errorMsg = "Merci de publier au moins un message ou une image"; //le message d'erreur
-      // }
-      // },
-    // },
-  // }
+      
 
 </script>
 

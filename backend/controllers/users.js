@@ -3,10 +3,35 @@ const Post = User.posts;
 
 // Trouver un utilisateur
 exports.findOneUser = (req, res, next) => {
-  User.findOne({_id: req.params.id})
-  .then(users => res.status(200).json(users))
-  .catch(error => res.status(400).json({error}));  
+  const userInfo = {};
+  User.findOne({ where: {_id: req.params.id} })
+    .then((user) => {
+      userInfo.userName = user.userName;
+      userInfo.email = user.email;
+      userInfo.firstName = user.firstName;
+      userInfo.lastName = user.lastName;
+      if (user.isAdmin == false) {
+        userInfo.role = "Utilisateur";
+      } else {
+        userInfo.role = "Administrateur";
+      }
+      userInfo.createdAt = user.createdAt;
+      userInfo.avatar = user.avatar;
+    })
+    .then(() => {
+      Post.count({ where: { userId: req.params.id } }).then((postcount) => {
+        userInfo.postsCount = postcount;
+        res.status(200).json(userInfo);
+      });
+    })
+    .catch((error) => res.status(404).json({ error }));
 };
+
+// exports.findOneUser = (req, res, next) => {
+//   User.findOne({_id: req.params.id})
+//   .then(users => res.status(200).json(users))
+//   .catch(error => res.status(400).json({error}));  
+// };
 
 // Modifier un utilisateur
 exports.modifyUser = (req, res ,next) => {
