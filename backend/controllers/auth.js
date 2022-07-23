@@ -28,7 +28,6 @@ exports.signup = (req, res, next) => {
           firstName: user.firstName,
           lastName: user.lastName,
           email: user.email,
-          avatar: user.avatar,
         },
         token: jwt.sign({ userId: user._id }, process.env.TOKEN, { expiresIn: "24h" })
       }))
@@ -58,7 +57,6 @@ exports.login = (req, res, next) => {
               firstName: user.firstName,
               lastName: user.lastName,
               email: user.email,
-              avatar: user.avatar,
             },
             token: jwt.sign({ userId: user._id }, process.env.TOKEN, { expiresIn: "24h" })
           });

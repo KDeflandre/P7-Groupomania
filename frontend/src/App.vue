@@ -42,6 +42,11 @@ export default {
 </script>
 
 <style lang="scss">
+
+body {
+  width: 100%;
+  margin: auto;
+}
 #app {
   font-family: Lato, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
@@ -52,6 +57,7 @@ export default {
   display: flex;
   flex-direction: column;
   min-height: 100vh;
+  width: 100%;
 }
 .container {
   max-width: 1440px;

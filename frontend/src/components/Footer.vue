@@ -1,11 +1,11 @@
 <template>
   <footer>
     <div class="container">
-          <div class="link">
+          <div class="linkFooter">
           <ul>
-            <router-link class="link" :to="{ name: 'Home' }">Accueil</router-link>
-            <router-link class="link" :to="{ name: 'PostPage' }">Fil d'actualité</router-link>
-            <router-link class="link" :to="{ name: 'SignUp' }">Login</router-link>
+            <router-link class="link" :to="{ name: 'PostPage' }">Accueil</router-link>
+            <router-link class="link" :to="{ name: 'Home' }">Se connecter</router-link>
+            <router-link class="link" :to="{ name: 'SignUp' }">Créer un compte</router-link>
           </ul>
           </div>
         </div>
@@ -13,20 +13,9 @@
 </template>
 
 <script>
-// import Youtube from "../assets/Icons/youtube-brands.svg";
-// import Twitter from "../assets/Icons/twitter-brands.svg";
-// import Instagram from "../assets/Icons/instagram-brands.svg";
-// import Linkedin from "../assets/Icons/linkedin-brands.svg";
-// import Groupomania from "../assets/Icons/groupomania.svg";
+
 export default {
   name: "Footer",
-  components: {
-    // Youtube,
-    // Twitter,
-    // Instagram,
-    // Linkedin,
-    // Groupomania,
-  },
 };
 </script>
 
@@ -35,6 +24,11 @@ footer {
   margin-top: auto;
   padding: 30px 25px;
   background-color: #303030;
+}
+.linkFooter a {
+  padding:10px;
+  margin:auto;
+  color:#fff;
 }
 footer .container {
   display: flex;

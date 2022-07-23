@@ -39,14 +39,9 @@
 </template>
 
 <script>
-import Modal from "../components/Modal.vue";
-import axios from "axios";
 
 export default {
     name: "Login",
-    components: {
-        Modal,
-    },
     data() {
         return {
             email: "",
@@ -54,17 +49,10 @@ export default {
             //ERRORS HANDLER
             error: null,
             errorMsg: "",
-            // MODAL
-            modalActive: false,
-            modalMessage: "",
         };
     },
     methods: {
-        //ACTIVER/DESACTIVER MODAL
-        closeModal() {
-            this.modalActive = !this.modalActive;
-            this.email = "";
-        },
+        
         //Log user
         sendFormLogin() {
             if (this.email == "" && this.password == "") {

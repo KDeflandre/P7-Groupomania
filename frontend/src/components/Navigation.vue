@@ -5,43 +5,38 @@
         <router-link class="header" :to="{ name: 'Home' }"><img src="../assets/Groupomania-ok.png" id="logo" alt="Logo de l'entreprise groupomania" title="logo groupomania" /></router-link>
       </div>
       <div class="nav-links">
-        <button> 
-            <router-link class="link" :to="{ name: 'PostPage' }">Créer une publication </router-link>
-        </button>
-          <div class="Logout" v-if="$store.getters.isLogged" @click="signOut">Se déconnecter </div>
+        <button class="onPage2" @click="openModal">Créer un post</button>
+        <!-- <div class="modal" v-show="showModal">
+        <div class="main">
+          <img src="../../public/assets/close.svg" Close class="icon close" @click="closeModal" />
+          <header class="modal-header">
+            <h2>Créer une publication</h2>
+          </header>
+          <section class="modal-body">
+            <textarea v-model="content" id="content" type="text" :placeholder="`Publication`" />
+          </section>
+
+          <section class="modal-file">
+            <p>Ajouter une photos</p>
+            <label for="file">
+              <img src="../../public/assets/image-gallery.svg" class="icon" />
+            </label>
+            <input type="file" @change="selectFile" ref="image" id="image" name="image"
+              accept=".jpg, .jpeg, .gif, .png" />
+            <img v-show="imageUrl" class="publication-photo" :src="imageUrl" alt="picture" />
+          </section>
+          <footer>
+            <button @click="postPublication">Publier</button>
+          </footer>
+        </div>
+      </div> -->
+       
+        <button class="logout" v-if="$store.getters.isLogged" @click="signOut">Se déconnecter </button>
+          
+          
       
       
-        <!-- <div v-if="userData" @click="toggleProfileMenu" class="profile" ref="profile">
-          <span>{{ userInitials }}</span>
-          <div v-show="profileMenu" class="profile-menu">
-            <div class="info">
-              <p class="initials">{{ userInitials }}</p>
-              <div class="right">
-                <p>{{ firstName }} {{ lastName }}</p>
-                <p>{{ email }}</p>
-              </div>
-            </div>
-            <div class="options">
-              <div class="option">
-                <router-link class="option" :to="{ name: 'Profile' }">
-                  <p>Profile</p>
-                </router-link>
-              </div>
-            </div>
-            <div v-if="role == 'Administrateur'" class="options">
-              <div class="option">
-                <router-link class="option" to="/admin">
-                  <p>Admin</p>
-                </router-link>
-              </div>
-            </div> -->
-            <!-- <div class="options">
-              <div @click="signOut" class="option">
-                <p>Déconnexion</p>
-              </div> -->
-            <!-- </div> -->
-          <!-- </div>
-        </div> -->
+    
       </div>
     </nav>
  
@@ -56,12 +51,10 @@ export default {
   data() {
     return {
       userData: "",
-      userInitials: "",
-      // input user
       firstName: "",
       lastName: "",
       role: "",
-      profileMenu: null,
+      showModal: false,
     };
   },
   mounted() {
@@ -77,6 +70,12 @@ export default {
     signOut() {
       this.$store.dispatch("logout")
     },
+    openModal() {
+      this.showModal = true
+    },
+    closeModal() {
+      this.showModal = false
+    },
 
     getUser() {
       //Récup user in localstorage
@@ -85,7 +84,8 @@ export default {
         axios
           .get("http://localhost:3000/api/users/" + userId, { 
             headers: { 
-              Authorization: "Bearer " + localStorage.getItem('token') }, })
+              Authorization: `Bearer ${this.$store.getters.getToken}` },
+              })
           .then((response) => {
             this.userData = response.data;
             this.firstName = response.data.firstName;
@@ -135,6 +135,8 @@ header nav {
 header nav .branding {
   display: flex;
   align-items: center;
+  width: auto;
+  height: auto ;
 }
 header nav .branding .header {
   font-weight: 600;
@@ -147,6 +149,11 @@ header nav .branding .header {
 #logo {
   width: 300px;
 }
+
+button.logout {
+  margin-left: 10px;
+}
+
 header nav .nav-links {
   position: relative;
   display: flex;
