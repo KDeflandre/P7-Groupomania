@@ -5,38 +5,11 @@
         <router-link class="header" :to="{ name: 'Home' }"><img src="../assets/Groupomania-ok.png" id="logo" alt="Logo de l'entreprise groupomania" title="logo groupomania" /></router-link>
       </div>
       <div class="nav-links">
-        <button class="onPage2" @click="openModal">Créer un post</button>
-        <!-- <div class="modal" v-show="showModal">
-        <div class="main">
-          <img src="../../public/assets/close.svg" Close class="icon close" @click="closeModal" />
-          <header class="modal-header">
-            <h2>Créer une publication</h2>
-          </header>
-          <section class="modal-body">
-            <textarea v-model="content" id="content" type="text" :placeholder="`Publication`" />
-          </section>
-
-          <section class="modal-file">
-            <p>Ajouter une photos</p>
-            <label for="file">
-              <img src="../../public/assets/image-gallery.svg" class="icon" />
-            </label>
-            <input type="file" @change="selectFile" ref="image" id="image" name="image"
-              accept=".jpg, .jpeg, .gif, .png" />
-            <img v-show="imageUrl" class="publication-photo" :src="imageUrl" alt="picture" />
-          </section>
-          <footer>
-            <button @click="postPublication">Publier</button>
-          </footer>
-        </div>
-      </div> -->
-       
+        <button class="onPage2" > Accueil
+        <router-link class="header" :to="{ name: 'Home' }"> </router-link>
+        </button>
         <button class="logout" v-if="$store.getters.isLogged" @click="signOut">Se déconnecter </button>
           
-          
-      
-      
-    
       </div>
     </nav>
  
@@ -96,13 +69,6 @@ export default {
 
             console.log("response getUser");
             console.log(response.data);
-          })
-          //Recup des initiales de l'user
-          .then(() => {
-            let name = `${this.firstName} ${this.lastName}`;
-            let rgx = new RegExp(/(\p{L}{1})\p{L}+/, "gu");
-            let initials = [...name.matchAll(rgx)] || [];
-            this.userInitials = ((initials.shift()?.[1] || "") + (initials.pop()?.[1] || "")).toUpperCase();
           })
           .catch((err) => console.log(err));
       }

@@ -6,7 +6,6 @@ export default createStore({
   state: {
     user: JSON.parse(localStorage.getItem("user")),
     token: localStorage.getItem("token"),
-    editOption: "",
   },
   getters: {
     getToken(state) {
@@ -60,9 +59,6 @@ export default createStore({
       this.state.user = {}
       localStorage.removeItem("user")
     },
-    editStyle(state, value) {
-      state.editOption = value
-    }
   },
   actions: {
     signup(context, data) {
@@ -94,9 +90,6 @@ export default createStore({
       router.push({ name: "Home" });
     },
     
-    changeEditStyle(context, value){
-      context.commit('editStyle',value)
-    }
   },
   modules: {
   }

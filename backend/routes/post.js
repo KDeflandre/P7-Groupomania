@@ -9,7 +9,7 @@ const postCtrl = require('../controllers/posts');
 
 // // Routage
 router.post("/", auth, multer, postCtrl.createPost);
-// router.post('/:id/like', auth, sauceCtrl.likeSauce);
+router.post('/:id/like', auth, postCtrl.likePost);
 router.put("/:id", auth, multer, postCtrl.modifyPost);
 router.get("/", auth, postCtrl.findAllPosts);
 // router.get("/users/:id", auth, postCtrl.findAllPostsForOne);

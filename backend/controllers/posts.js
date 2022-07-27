@@ -7,16 +7,17 @@ const fs = require('fs');
 exports.findAllPosts = (req, res, next) => {
   Post.aggregate(
     [
-      { $lookup: {
-      from: "users",
-      localField: "userId",
-      foreignField: "_id",
-      as: "user"
-    }},
-    {$sort: {createdAt : -1, posts: 1 }},
-  ]
-  )
-.exec(function (err, posts) {
+      {
+        $lookup: {
+          from: "users",
+          localField: "userId",
+          foreignField: "_id",
+          as: "user"
+        }
+      },
+      { $sort: { createdAt: -1, posts: 1 } },
+    ]
+  ).exec(function (err, posts) {
     res.status(200).json({ posts });
   });
 };
@@ -40,23 +41,30 @@ exports.createPost = (req, res, next) => {
   const post = new Post(newPost);
   post.save()
     .then(() => res.status(201).json({ message: "Post ajouté" }))
-    .catch(error => res.status(400).json({ error:"Rien à publier" }));
+    .catch(error => res.status(400).json({ error: "Rien à publier" }));
 };
-
 
 // Modifier un message
 exports.modifyPost = (req, res ,next) => {
-  const postObject = req.file ?
+ const userId = User.userId;
+ const isAdmin = User.isAdmin;
+
+  if (userId == Post.userId || isAdmin ) {
+    const postObject = req.file ?
   {
-    ...JSON.parse(req.body.post),
+    ...req.body.post,
       imageUrl: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`
   }
   : {...req.body};
 
   Post.updateOne({_id: req.params.id}, {...postObject, _id: req.params.id})
   .then(() => res.status(200).json({message: 'Post modifié'}))
-  .catch(error => res.status(400).json({error}));  
-};
+  .catch(error => res.status(400).json({error}));    
+  } else {
+    res.status(401).json({ error: 'Utilisateur non autorisé à modifier ce post' })
+}};
+
+
 
 // Supprimer un message
 exports.deletePost = (req, res, next) => {
@@ -79,12 +87,9 @@ exports.likePost = (req, res, next) => {
   Post.findOne({ _id: req.params.id })
     .then((post) => {
 
-switch(req.body.like){
-  case 1: 
-      if (post.usersLiked.includes(req.body.userId)) return
-     
-      // MAJ BDD
-      Post.updateOne(
+      if (post.usersLiked.includes(req.body.userId)) {
+        // MAJ BDD
+        Post.updateOne(
           { _id: req.params.id },
           {
           $inc: { likes: 1 },
@@ -93,47 +98,19 @@ switch(req.body.like){
       )
       .then(() => res.status(201).json({ message: "Post liké ! " }))
       .catch((error) => res.status(400).json({ error }));
-      break;
-  // case -1: 
-  //     if (sauce.usersDisliked.includes(req.body.userId)) return
-      
-  //     // MAJ BDD
-  //     Post.updateOne(
-  //         { _id: req.params.id },
-  //         {
-  //         $inc: { dislikes: 1 },
-  //         $push: { usersDisliked : req.body.userId },
-  //         }
-  //     )
-  //     .then(() => res.status(201).json({ message: "Vous n'appréciez pas cette sauce ?" }))
-  //     .catch((error) => res.status(400).json({ error }));
-  //     break;
-  case 0:
-      if (post.usersLiked.includes(req.body.userId)) {
-          
+        // Supprimer le user de la list des user likeds
+        // décrementer de 1 le nombre de like
+      } else {
         // MAJ BDD
-          Post.updateOne(
+        Post.updateOne(
           { _id: req.params.id },
           {
-              $inc: { likes: -1 },
-              $pull: { usersLiked: req.body.userId },
+            $inc: { likes: -1 },
+            $push: { usersLiked: req.body.userId },
           }
-          )
-          .then(() => res.status(201).json({ message: "Pas encore testé cette?" }))
+        )
+          .then(() => res.status(201).json({ message: "Post pas liké ! " }))
           .catch((error) => res.status(400).json({ error }));
-          
-      // } else if (sauce.usersDisliked.includes(req.body.userId)) {
-          
-      //   // MAJ BDD
-      //     Sauce.updateOne(
-      //     { _id: req.params.id },
-      //     {
-      //         $inc: { dislikes: -1 },
-      //         $pull: { usersDisliked: req.body.userId },
-      //     }
-      //     ).then(() => res.status(201).json({ message: "Pas encore testé cette sauce ?" }))
-      //     .catch((error) => res.status(400).json({ error }));
-      // }
-      break;
-}}}
-)}
+      }
+    })
+}

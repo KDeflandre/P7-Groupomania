@@ -80,10 +80,15 @@ body {
     margin: 0 auto;
     min-width: 320px;
     max-width: 1920px;
-  }
+}
+
+.picture img {
+    max-height: 100vh;
+    max-width: 100%;
+}
 
 .home {
-    display:flex;
+    display: flex;
     flex-direction: row-reverse;
 }
 
@@ -93,9 +98,9 @@ body {
 
 .section2 {
     width: 50%;
-    display:flex;
+    display: flex;
     flex-direction: column;
-    padding-top: 20px; 
+    padding-top: 20px;
     justify-content: center;
 }
 
@@ -110,28 +115,31 @@ body {
 .connexion {
     text-align: center;
     align-items: center;
-    padding:20px;
+    padding: 20px;
 }
 
 .btnHome {
-    width:50%;
+    width: 50%;
     font-size: 1.3rem;
     height: 3rem;
     border: solid 1px #333;
     cursor: pointer;
-} 
+}
 
-.login_box, .register_box {
-    width: 80%;  
+.login_box,
+.register_box {
+    width: 80%;
     margin: 0 auto;
 }
 
-.login_box, .register_box h1 {
+.login_box,
+.register_box h1 {
     padding-top: 30px;
-} 
+}
+
 .connexion p {
-    padding: 0px 52px 0 52px ;
-} 
+    padding: 0px 52px 0 52px;
+}
 
 /* .formBox {
     display: flex;
@@ -151,7 +159,7 @@ h1 {
     padding-top: 0.5rem;
 }
 
-form input{
+form input {
     width: 80%;
     outline: none;
     border: 1px solid #FFD7D7;
@@ -173,10 +181,11 @@ form input{
     background: #FD2D01;
     border-radius: 12px;
     border-color: none;
-    color:white;
+    color: white;
     border: none;
     cursor: pointer;
 }
+
 .btnHome:hover {
     background: #4E5166;
     color: #FFF;
@@ -186,10 +195,12 @@ form input{
 .btnHome a {
     color: #FFF;
 }
+
 .btnHome:hover a {
     color: #fd2d01;
     transition: 0.8s;
 }
+
 a:hover {
     text-decoration: underline;
 }
@@ -200,54 +211,59 @@ a:hover {
 }
 
 .registerArea {
-    display:flex;
+    display: flex;
     justify-content: center;
     padding-top: 15px;
 }
+
 .txtRegister {
     padding-right: 6px;
 }
 
-.signup, .returnLogin {
-    color:#FD2D01;
+.signup,
+.returnLogin {
+    color: #FD2D01;
     font-weight: bold;
-    cursor:  pointer;
+    cursor: pointer;
 }
 
 @media screen and (max-width: 1024px) {
 
     .home {
-        display:flex;
+        display: flex;
         flex-direction: initial;
     }
-   .section1{
-    display: none;
-   }
 
-   .section2 {
-    width: 100%;
-    margin: 0 auto;
-    justify-content: center;
-    align-items: center;
-    display:block;
-   }
+    .section1 {
+        display: none;
+    }
 
-   #logo img {
-    width: 300px;
-    padding-bottom: 30px;
+    .section2 {
+        width: 100%;
+        margin: 0 auto;
+        justify-content: center;
+        align-items: center;
+        display: block;
+    }
+
+    #logo img {
+        width: 300px;
+        padding-bottom: 30px;
+    }
+
+    .connexion {
+        width: auto;
+        margin: auto;
+    }
+
+    .registerArea {
+        display: block;
+    }
+
+    .login__box,
+    .register_box {
+        width: 100%;
+    }
+
 }
-   .connexion {
-    width: auto;
-    margin: auto;
-   }
-
-   .registerArea {
-    display: block;
-   }
-
-   .login__box, .register_box {
-    width: 100%;
-   }
-
-  }
 </style>

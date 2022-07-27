@@ -104,7 +104,7 @@ export default {
     deletePost() {
       axios
         .delete("http://127.0.0.1:3000/api/posts/" + this.$route.params.id, {
-          headers: { Authorization: "Bearer " + localStorage.getItem("token") },
+          headers: { Authorization: `Bearer ${this.$store.getters.getToken}` },
         })
         .then((response) => {
           this.modalPost = response.data.post; //On recup le message du back

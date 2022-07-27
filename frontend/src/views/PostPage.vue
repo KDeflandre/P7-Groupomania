@@ -2,10 +2,13 @@
   <div class="container site">
     <main class="main">
       <div class="header-btn">
-        <div class="welcome"><p>Bienvenue </p> <p class="userWelcome"> {{lastName}} {{ firstName }}  ! </p> </div>
-      <button class="onPage" @click="openModal">Créer un post</button>
+        <div class="welcome">
+          <p>Bienvenue </p>
+          <p class="userWelcome"> {{ lastName }} {{ firstName }} ! </p>
+        </div>
+        <button class="onPage" @click="openModal">Créer un post</button>
       </div>
-      <div class="modal" v-show="showModal">
+      <div class="modal" v-if="showModal">
         <div class="main">
           <img src="../../public/assets/close.svg" Close class="icon-close" @click="closeModal" />
           <header class="modal-header">
@@ -16,43 +19,19 @@
           </section>
 
           <div class="footer-btn">
-          <section class="modal-file">
-           <!-- <p>Ajouter des photos</p>
-        <label for="file" class="icon"></label>
-        <input type="file" @change="selectFile" ref="file" id="file" name="image" accept=".jpg, .jpeg, .gif, .png" />
-        <img v-show="messageUrl" class="publication-photo" :src="messageUrl" alt="picture" /> -->
-
-
-
-            <!-- <label class="btn-image" >
-              Ajouter une image
-            <input type="file" @change="selectFile" ref="image" id="image" name="image"
-              accept=".jpg, .jpeg, .gif, .png" />
-              
-            <img v-show="imageUrl" class="publication-photo" :src="imageUrl" alt="picture" />
-            </label> -->
-
-            <div class="btn-image">
-             <label class="btn-image-label" for="inputImage" > 
-                Ajouter une image 
-              </label> 
-              <img v-show="imageUrl" class="publication-photo" :src="imageUrl" alt="picture"/> 
-            </div>
-            <input 
-              type="file" 
-              @change="selectFile" 
-              ref="image" 
-              id="inputImage" 
-              name="inputImage"
-              aria-describedby="image"
-              accept=".jpg, .jpeg, .gif, .png" 
-              />
-
-            
-          </section>
-          <footer>
-            <button @click="postPublication">Publier</button>
-          </footer>
+            <section class="modal-file">
+              <div class="btn-image">
+                <label class="btn-image-label" for="inputImage">
+                  Ajouter une image
+                </label>
+              </div>
+              {{ imageName }}
+              <input type="file" @change="selectFile" ref="image" id="inputImage" name="inputImage"
+                aria-describedby="image" accept=".jpg, .jpeg, .gif, .png" />
+            </section>
+            <footer>
+              <button @click="postPublication">Publier</button>
+            </footer>
           </div>
         </div>
       </div>
@@ -71,12 +50,13 @@ export default {
   data() {
     return {
       showModal: false,
+      imageName: "",
       image: "",
       imageUrl: "",
       content: "",
       posts: [],
-      firstName:this.$store.getters.getUserFirstName,
-      lastName:this.$store.getters.getUserInfos,
+      firstName: this.$store.getters.getUserFirstName,
+      lastName: this.$store.getters.getUserInfos,
     }
   },
   methods: {
@@ -93,6 +73,7 @@ export default {
         });
     },
     selectFile() {
+      this.imageName = this.$refs.image.files[0].name
       this.image = this.$refs.image.files[0];
       this.imageUrl = URL.createObjectURL(this.image);
     },
@@ -125,15 +106,16 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
 .container {
   max-width: 1080px;
   margin-left: auto;
   margin-right: auto;
 }
+
 .welcome {
   font-size: large;
-  display:flex;
+  display: flex;
 }
 
 .header-btn {
@@ -141,17 +123,18 @@ export default {
   justify-content: space-between;
   align-items: center;
 }
+
 button.onPage {
   width: 20%;
   margin-bottom: 30px;
-  padding:15px;
+  padding: 15px;
   border-radius: 10px;
 }
 
 .userWelcome {
   font-weight: bold;
   padding-left: 7px;
-  color:#FD2D01;
+  color: #FD2D01;
 }
 
 .site {
@@ -192,6 +175,7 @@ button.onPage {
   left: 0;
   background-color: rgba(0, 0, 0, 0.4);
 }
+
 .addImage {
   text-transform: none;
 }
@@ -215,9 +199,10 @@ button.onPage {
 }
 
 .footer-btn {
-  display:flex;
+  display: flex;
   justify-content: space-between;
 }
+
 .main {
   display: flex;
   flex-direction: column;
@@ -254,8 +239,9 @@ button.onPage {
 }
 
 .modal-body #content {
-  padding:50px;
+  padding: 50px;
 }
+
 .icon {
   width: 35px;
   height: auto;
@@ -266,13 +252,15 @@ button.onPage {
   justify-content: center;
   align-items: center;
 }
+
 .icon-close {
   width: 35px;
   height: auto;
   position: relative;
-  top:-15px;
-  left:710px;
+  top: -15px;
+  left: 710px;
 }
+
 .modal-file p {
   padding-bottom: 10px;
 }
@@ -302,6 +290,4 @@ footer {
   display: flex;
   justify-content: space-around;
 }
-
-
 </style>
