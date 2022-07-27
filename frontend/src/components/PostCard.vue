@@ -24,12 +24,8 @@
     </div>
     <footer class="card-footer">
       
-      <!-- <button @click="">
-      <img src="../../public/assets/Like.svg" alt="like" width="45" height="45" class="card-like" />
-        <span class="card-icon">0 like</span>
-        </button> -->
-      <button  @click="toggleLike" v-if="$store.getters.getUserId">
-      <i class="fa fa-thumbs-o-up"></i> {{ likesCount }}
+      <button  @click="likePost(post._id)" v-if="$store.getters.getUserId">
+      <i class="fa fa-thumbs-o-up"></i> 
       </button>
 
       <button @click="deletePublication()" v-if="$store.getters.getUserId == post.userId || $store.getters.isAdmin">
@@ -85,8 +81,6 @@ export default {
       image: "",
       imageUrl: "",
       role:"",
-      likes: false,
-      likesCount: 0
     }
   },
 
@@ -95,11 +89,10 @@ export default {
   },
 
   methods: {
+     
     moment(date, format) {
       return moment(date).format(format)
     },
-
-    
 
     selectFile() {
       this.imageName = this.$refs.image.files[0].name
@@ -167,7 +160,6 @@ export default {
         })
         .then((response) => {
           this.$router.go(0);
-          console.log("this is response from deletePublication");
           console.log(response);
         })
         .catch((err) => {
@@ -177,15 +169,8 @@ export default {
       } else {
         return;
   }},
-// like les posts 
 
-toggleLike() { 
-            if (this.likes) {
-              this.unlikePost()
-            } else {
-              this.likePost()
-            }
-},
+// like les posts 
 
   likePost() {
     this.submitted = true;
@@ -194,26 +179,12 @@ toggleLike() {
         headers: { Authorization: `Bearer ${this.$store.getters.getToken}` },
       })
       .then((response) => {
-        this.likes = true;
-        this.submitted = false;
-        this.text = 'Unlike';
-      })
+        console.log(response);
+          }
+        
+      )}
 },
 
-unlikePost: function() {
-    this.submitted = true;
-      axios
-     .post(`http://localhost:3000/api/posts/)${this.post._id}/dislike`, {
-        headers: { Authorization: `Bearer ${this.$store.getters.getToken}` },
-
-     })
-     .then((response) => {
-        this.likes = false;
-        this.submitted = false;
-        this.text = 'Like';
-     })
-    }
-}
 }
 </script>
 
