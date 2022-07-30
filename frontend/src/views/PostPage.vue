@@ -35,7 +35,7 @@
           </div>
         </div>
       </div>
-      <PostCard v-for="post in posts" :key="post._id" :post="post" />
+      <PostCard v-for="post in posts" :key="post._id" :currentpost="post" @refreshPosts="getAllPosts" />
     </main>
   </div>
 </template>

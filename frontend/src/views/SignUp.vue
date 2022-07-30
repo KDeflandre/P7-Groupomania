@@ -20,18 +20,21 @@
                         <input type="text" v-model="prenom" placeholder="Prénom" required>
                         <h3>Email</h3>
                         <input type="email" v-model="email" placeholder="Adresse email" required>
-                        
+
                         <div class="btnPassword">
-                            <label for="password"> <h3> Mot de passe</h3> </label>
+                            <label for="password">
+                                <h3> Mot de passe</h3>
+                            </label>
                             <input :type="showPassword ? 'text' : 'password'" class="input" name="password"
                                 v-model="password" placeholder="Mot de passe" required>
-                                <span class="buttonTxt" @click="toggleShow">
+                            <span class="buttonTxt" @click="toggleShow">
                                 <span class="icon is-small is-right">
-                                    <i class="fa" :class="{ 'fa-eye-slash': !showPassword, 'fa-eye': showPassword }"></i>
+                                    <i class="fa"
+                                        :class="{ 'fa-eye-slash': !showPassword, 'fa-eye': showPassword }"></i>
                                 </span>
-                                </span>
+                            </span>
                         </div>
-                        
+
                         <h3>Confirmation du mot de passe</h3>
                         <input type="password" v-model="password2" class="password"
                             placeholder="Confirmation mot de passe" required>
@@ -40,7 +43,7 @@
                     </form>
                     <div class="registerArea">
                         <div class="txtRegister">Vous avez déjà un compte ?</div>
-                        <router-link class="returnLogin" :to="{ name: 'Home' }">Se connecter</router-link>
+                        <router-link class="returnLogin" :to="{ name: 'Login' }">Se connecter</router-link>
                     </div>
                 </div>
             </div>
@@ -56,7 +59,7 @@ export default {
             // Permet de cacher ou pas le MDP
             showPassword: false,
             password: null,
-            password2:null,
+            password2: null,
             //Permet de récupérer la valeur des inputs
             prenom: "",
             nom: "",
@@ -91,8 +94,8 @@ export default {
                 this.error = true; // Si au moins 1 champ est vide on signal une erreur
                 this.errorMsg = "Merci de remplir tous les champs"; //le message d'erreur
             } else if (this.password !== this.password2) {
-                this.error = true; 
-                this.errorMsg = "Les mots de passe ne sont pas indentiques"; 
+                this.error = true;
+                this.errorMsg = "Les mots de passe ne sont pas indentiques";
             } else {
                 this.error = false;
                 this.errorMsg = "";
@@ -116,31 +119,39 @@ body {
     margin: 0 auto;
     min-width: 320px;
     max-width: 1920px;
-  }
+}
+
 .buttonP {
     background: none;
-    color:#FD2D01;
+    color: #FD2D01;
     position: absolute;
-    left:780px;
-    top:675px;
+    left: 780px;
+    top: 675px;
     right: 0;
     bottom: 0;
 }
+
 .btnPassword {
-    position:relative;
+    position: relative;
 }
+
 label.password {
-    display:block;
+    display: block;
 }
+
 .buttonTxt {
-    right: 0;
-    bottom: 0;
-    left:650px;
-    top: 47px;
+    bottom: 20px;
+    right: 10%;
     position: absolute;
+    width: 50px;
+    height: 46px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
+
 .home {
-    display:flex;
+    display: flex;
     flex-direction: row-reverse;
 }
 
@@ -150,9 +161,9 @@ label.password {
 
 .section2 {
     width: 50%;
-    display:flex;
+    display: flex;
     flex-direction: column;
-    padding-top: 20px; 
+    padding-top: 20px;
     justify-content: center;
 }
 
@@ -167,28 +178,31 @@ label.password {
 .connexion {
     text-align: center;
     align-items: center;
-    padding:20px;
+    padding: 20px;
 }
 
 .login {
-    width:50%;
+    width: 50%;
     font-size: 1.3rem;
     height: 3rem;
     border: solid 1px #333;
     cursor: pointer;
-} 
+}
 
-.login_box, .register_box {
-    width: 80%;  
+.login_box,
+.register_box {
+    width: 80%;
     margin: 0 auto;
 }
 
-.login_box, .register_box h1 {
+.login_box,
+.register_box h1 {
     padding-top: 30px;
-} 
+}
+
 .connexion p {
-    padding: 0px 52px 0 52px ;
-} 
+    padding: 0px 52px 0 52px;
+}
 
 /* .formBox {
     display: flex;
@@ -208,7 +222,7 @@ h1 {
     padding-top: 0.5rem;
 }
 
-form input{
+form input {
     width: 80%;
     outline: none;
     border: 1px solid #FFD7D7;
@@ -230,10 +244,11 @@ form input{
     background: #FD2D01;
     border-radius: 12px;
     border-color: none;
-    color:white;
+    color: white;
     border: none;
     cursor: pointer;
 }
+
 .btnHome:hover {
     background: #4E5166;
     color: #FFF;
@@ -243,10 +258,12 @@ form input{
 .btnHome a {
     color: #FFF;
 }
+
 .btnHome:hover a {
     color: #fd2d01;
     transition: 0.8s;
 }
+
 a:hover {
     text-decoration: underline;
 }
@@ -257,56 +274,61 @@ a:hover {
 }
 
 .registerArea {
-    display:flex;
+    display: flex;
     justify-content: center;
     padding-top: 15px;
 }
+
 .txtRegister {
     padding-right: 6px;
-    color:black;
+    color: black;
     font-weight: 500;
 }
 
-.signup, .returnLogin {
-    color:#FD2D01;
+.signup,
+.returnLogin {
+    color: #FD2D01;
     font-weight: bold;
-    cursor:  pointer;
+    cursor: pointer;
 }
 
 @media screen and (max-width: 1024px) {
 
     .home {
-        display:flex;
+        display: flex;
         flex-direction: initial;
     }
-   .section1{
-    display: none;
-   }
 
-   .section2 {
-    width: 100%;
-    margin: 0 auto;
-    justify-content: center;
-    align-items: center;
-    display:block;
-   }
+    .section1 {
+        display: none;
+    }
 
-   #logo img {
-    width: 300px;
-    padding-bottom: 30px;
+    .section2 {
+        width: 100%;
+        margin: 0 auto;
+        justify-content: center;
+        align-items: center;
+        display: block;
+    }
+
+    #logo img {
+        width: 300px;
+        padding-bottom: 30px;
+    }
+
+    .connexion {
+        width: auto;
+        margin: auto;
+    }
+
+    .registerArea {
+        display: block;
+    }
+
+    .login__box,
+    .register_box {
+        width: 100%;
+    }
+
 }
-   .connexion {
-    width: auto;
-    margin: auto;
-   }
-
-   .registerArea {
-    display: block;
-   }
-
-   .login__box, .register_box {
-    width: 100%;
-   }
-
-  }
 </style>

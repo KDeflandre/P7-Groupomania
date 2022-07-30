@@ -2,17 +2,17 @@
   <header>
     <nav class="container">
       <div class="branding">
-        <router-link class="header" :to="{ name: 'Home' }"><img src="../assets/Groupomania-ok.png" id="logo" alt="Logo de l'entreprise groupomania" title="logo groupomania" /></router-link>
+        <router-link class="header" :to="{ name: 'PostPage' }"><img src="../assets/Groupomania-ok.png" id="logo"
+            alt="Logo de l'entreprise groupomania" title="logo groupomania" /></router-link>
       </div>
       <div class="nav-links">
-        <button class="onPage2" > Accueil
-        <router-link class="header" :to="{ name: 'Home' }"> </router-link>
+        <button class="onPage2"> Accueil
+          <router-link class="header" :to="{ name: 'PostPage' }"> </router-link>
         </button>
         <button class="logout" v-if="$store.getters.isLogged" @click="signOut">Se déconnecter </button>
-          
       </div>
     </nav>
- 
+
   </header>
 </template>
 
@@ -55,10 +55,11 @@ export default {
       const userId = localStorage.getItem("userId");
       if (userId) {
         axios
-          .get("http://localhost:3000/api/users/" + userId, { 
-            headers: { 
-              Authorization: `Bearer ${this.$store.getters.getToken}` },
-              })
+          .get("http://localhost:3000/api/users/" + userId, {
+            headers: {
+              Authorization: `Bearer ${this.$store.getters.getToken}`
+            },
+          })
           .then((response) => {
             this.userData = response.data;
             this.firstName = response.data.firstName;
@@ -77,33 +78,30 @@ export default {
 };
 </script>
 <style scoped>
+
 header {
   background-color: #fff;
   padding: 0 25px;
   box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
   z-index: 99;
 }
+
 a.header {
   width: 500px;
 }
-header .link {
-  font-weight: 500;
-  padding: 0 8px;
-  transition: 0.3s color ease;
-}
-header .link:hover {
-  color: #1eb8b8;
-}
+
 header nav {
   display: flex;
-  padding: 20px 0;
+  padding: 20px;
 }
+
 header nav .branding {
   display: flex;
   align-items: center;
   width: auto;
-  height: auto ;
+  height: auto;
 }
+
 header nav .branding .header {
   font-weight: 600;
   font-size: 24px;
@@ -112,12 +110,18 @@ header nav .branding .header {
   display: flex;
   align-items: center;
 }
+
 #logo {
   width: 300px;
 }
 
 button.logout {
   margin-left: 10px;
+  margin-top:0px;
+}
+
+button.onPage2 {
+  margin-top:0px;
 }
 
 header nav .nav-links {
@@ -127,20 +131,25 @@ header nav .nav-links {
   align-items: center;
   justify-content: flex-end;
 }
+
 @media (max-width: 750px) {
   header nav .nav-links {
     padding-right: 50px;
   }
 }
+
 header nav .nav-links ul {
   margin-right: 30px;
 }
+
 header nav .nav-links ul .link {
   margin-right: 30px;
 }
+
 header nav .nav-links ul .link:last-child {
   margin-right: 0;
 }
+
 header nav .nav-links .profile {
   position: relative;
   cursor: pointer;
@@ -154,6 +163,4 @@ header nav .nav-links .profile {
   background-color: #303030;
   user-select: none;
 }
-
-
 </style>

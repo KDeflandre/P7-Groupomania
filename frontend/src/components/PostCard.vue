@@ -1,68 +1,74 @@
 <template>
-  <article class="card">
-    <header class="card-header card-header-avatar">
-      <img src="../../public/assets/avatar.svg" alt="avatar" width="45" height="45" class="card-avatar" />
-      <div class="infos-date">
-        <div class="infos-user">
-          <p>
-            {{ post.user[0].firstName}}
-            {{ post.user[0].lastName}}
-          </p>
-        </div>
-        <time class="card-date">
-          Publié le {{ moment(post.createdAt, "DD/MM/YYYY [à] HH[h]mm") }}
-        </time>
-      </div>
-    </header>
-    <div class="card-body">
-      <p class="text-content" v-show="post.content">
-        {{ post.content }}
-      </p>
-      <div v-if="post.imageUrl">
-        <img :src="post.imageUrl" alt="img posted" class="fullwidth" />
-      </div>
-    </div>
-    <footer class="card-footer">
-      
-      <button  @click="likePost(post._id)" v-if="$store.getters.getUserId">
-      <i class="fa fa-thumbs-o-up"></i> 
-      </button>
-
-      <button @click="deletePublication()" v-if="$store.getters.getUserId == post.userId || $store.getters.isAdmin">
-        <span class="card-icon">Supprimer</span>
-      </button>
-      
-      <button @click="showModal = true" v-if="$store.getters.getUserId == post.userId || $store.getters.isAdmin">
-        <span class="card-icon">Modifier</span>
-      </button>
-
-    </footer>
-  </article>
-  
-  <div class="modal" v-if="showModal">
-    <div class="main">
-      <img src="../../public/assets/close.svg" Close class="icon-close" @click="showModal = false" />
-      <header class="modal-header">
-        <h2>Modifier la publication</h2>
-      </header>
-      <section class="modal-body">
-        <textarea v-model="post.content" id="content" type="text" :placeholder="`Publication`" />
-      </section>
-
-      <div class="footer-btn">
-        <section class="modal-file">
-          <div class="btn-image">
-            <label class="btn-image-label" for="inputImage">
-              {{ post.imageUrl ? "Modifier l'image" : "Ajouter une image" }}
-            </label>
+  <div>
+    <article class="card" v-if="currentpost.content">
+      <header class="card-header card-header-avatar">
+        <img src="../../public/assets/avatar.svg" alt="avatar" width="45" height="45" class="card-avatar" />
+        <div class="infos-date">
+          <div class="infos-user">
+            <p>
+              {{ currentpost.user[0].firstName }}
+              {{ currentpost.user[0].lastName }}
+            </p>
           </div>
-          {{ imageName }}
-          <input type="file" @change="selectFile" ref="image" id="inputImage" name="inputImage" aria-describedby="image"
-            accept=".jpg, .jpeg, .gif, .png" />
+          <time class="card-date">
+            Publié le {{ moment(currentpost.createdAt, "DD/MM/YYYY [à] HH[h]mm") }}
+          </time>
+        </div>
+      </header>
+      <div class="card-body">
+        <p class="text-content" v-show="currentpost.content">
+          {{ currentpost.content }}
+        </p>
+        <div v-if="currentpost.imageUrl">
+          <img :src="currentpost.imageUrl" alt="img posted" class="fullwidth" />
+        </div>
+      </div>
+      <footer class="card-footer">
+
+        <button @click="likePost(currentpost._id)"
+          :class="{ 'active': currentpost.usersLiked.includes($store.getters.getUserId) }">
+          {{ currentpost.likes }}
+          <i class="fa fa-thumbs-o-up"></i>
+        </button>
+
+        <button class="delete" @click="deletePublication()"
+          v-if="$store.getters.getUserId == currentpost.userId || $store.getters.isAdmin">
+          <span class="card-icon">Supprimer</span>
+        </button>
+
+        <button @click="showModal = true"
+          v-if="$store.getters.getUserId == currentpost.userId || $store.getters.isAdmin">
+          <span class="card-icon">Modifier</span>
+        </button>
+
+      </footer>
+    </article>
+
+    <div class="modal" v-if="showModal">
+      <div class="main">
+        <img src="../../public/assets/close.svg" Close class="icon-close" @click="showModal = false" />
+        <header class="modal-header">
+          <h2>Modifier la publication</h2>
+        </header>
+        <section class="modal-body">
+          <textarea v-model="post.content" id="content" type="text" :placeholder="`Publication`" />
         </section>
-        <footer>
-          <button @click="editPublication">Enregistrer</button>
-        </footer>
+
+        <div class="footer-btn">
+          <section class="modal-file">
+            <div class="btn-image">
+              <label class="btn-image-label" for="inputImage">
+                {{ post.imageUrl ? "Modifier l'image" : "Ajouter une image" }}
+              </label>
+            </div>
+            {{ imageName }}
+            <input type="file" @change="selectFile" ref="image" id="inputImage" name="inputImage"
+              aria-describedby="image" accept=".jpg, .jpeg, .gif, .png" />
+          </section>
+          <footer>
+            <button @click="editPublication">Enregistrer</button>
+          </footer>
+        </div>
       </div>
     </div>
   </div>
@@ -73,23 +79,24 @@ import moment from "moment"
 import axios from "axios";
 export default {
   name: "PostCard",
-  props: ["post"],
+  props: ["currentpost"],
   data() {
     return {
       showModal: false,
       imageName: "",
       image: "",
       imageUrl: "",
-      role:"",
+      role: "",
+      post: {}
     }
   },
 
   mounted() {
-    this.getAllPosts();
+    this.post = { ... this.currentpost }
   },
 
   methods: {
-     
+
     moment(date, format) {
       return moment(date).format(format)
     },
@@ -100,26 +107,7 @@ export default {
       this.imageUrl = URL.createObjectURL(this.image);
     },
 
-    getAllPosts() {
-      axios
-        .get("http://localhost:3000/api/posts", {
-          headers: { Authorization: `Bearer ${this.$store.getters.getToken}` },
-        })
-        .then((response) => {
-          this.posts = response.data.posts;
-        })
-        .catch((error) => {
-          console.log(error);
-        });
-        },
-      openModal() {
-      this.showModal = true
-      },
-
-      closeModal() {
-      this.showModal = false
-    },
-      postPublication() {
+    editPublication() {
       const formData = new FormData();
       formData.append("image", this.image);
       formData.append("content", this.post.content);
@@ -128,62 +116,46 @@ export default {
           headers: { Authorization: `Bearer ${this.$store.getters.getToken}` },
         })
         .then((response) => {
-          this.closeModal()
-          this.getAllPosts()
-        })
-        .catch(error => (this.error = error));
-    },
-
-      editPublication() {
-      const formData = new FormData();
-      formData.append("image", this.image);
-      formData.append("content", this.post.content);
-      axios
-        .put(`http://localhost:3000/api/posts/${this.post._id}`, formData, {
-          headers: { Authorization: `Bearer ${this.$store.getters.getToken}` },
-        })
-        .then((response) => {
-          this.closeModal()
-          this.$router.go(0);
+          this.showModal = false
+          this.$emit("refreshPosts")
         })
         .catch(error => (this.error = error));
     },
 
     deletePublication() {
-       let confirmDeletePost = confirm(
+      let confirmDeletePost = confirm(
         "voulez-vous vraiment supprimer votre publication ?"
       );
       if (confirmDeletePost == true) {
+        axios
+          .delete(`http://localhost:3000/api/posts/${this.post._id}`, {
+            headers: { Authorization: `Bearer ${this.$store.getters.getToken}` },
+          })
+          .then((response) => {
+            this.$emit("refreshPosts")
+          })
+          .catch((err) => {
+            console.log("this is error from deletePublication");
+            console.log(err);
+          });
+      } else {
+        return;
+      }
+    },
+
+    // like les posts 
+
+    likePost() {
+      this.submitted = true;
       axios
-        .delete(`http://localhost:3000/api/posts/${this.post._id}`, {
+        .post(`http://localhost:3000/api/posts/${this.post._id}/like`, {}, {
           headers: { Authorization: `Bearer ${this.$store.getters.getToken}` },
         })
         .then((response) => {
-          this.$router.go(0);
-          console.log(response);
+          this.$emit("refreshPosts")
         })
-        .catch((err) => {
-          console.log("this is error from deletePublication");
-          console.log(err);
-        });
-      } else {
-        return;
-  }},
-
-// like les posts 
-
-  likePost() {
-    this.submitted = true;
-      axios 
-      .post(`http://localhost:3000/api/posts/)${this.post._id}/like`, {
-        headers: { Authorization: `Bearer ${this.$store.getters.getToken}` },
-      })
-      .then((response) => {
-        console.log(response);
-          }
-        
-      )}
-},
+    }
+  },
 
 }
 </script>
@@ -195,6 +167,10 @@ export default {
   box-sizing: border-box;
 }
 
+button.active {
+  background: #4E5166;
+}
+
 /* CARD START */
 .card {
   border: solid 1px #dbdbdb;
@@ -202,12 +178,7 @@ export default {
   border-radius: 3px;
   margin-bottom: 15px;
   box-shadow: 0 4px 6px -1px rgb(0 0 0 / 10%), 0 2px 4px -1px rgb(0 0 0 / 6%);
-}
-
-.post.imageUrl {
-  border-radius: 5px;
-  width: 350px;
-  height: 300px;
+  margin:40px;
 }
 
 img {
@@ -232,7 +203,7 @@ img {
 }
 
 .infos-date {
-  display: flex;
+  /* display: flex; */
   flex-direction: column;
   align-items: flex-start;
 }
@@ -241,14 +212,7 @@ img {
   padding: 20px;
   padding-top: 30px;
 }
-
-.wrapper {
-  display: flex;
-  justify-content: flex-start;
-  align-items: center;
-}
-
-.delete:hover {
+button.delete:hover {
   cursor: pointer;
   fill: red;
   transition: all 0.2s ease;
@@ -261,16 +225,9 @@ img {
 /*CARD HEADER */
 .card-header {
   display: flex;
+  align-items: center;
   padding: 10px;
-  display: flex;
   border-bottom: solid 1px #dbdbdb;
-}
-
-.card-header-wrapper {
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-end;
-  padding-left: 10px;
 }
 
 .card-avatar {
@@ -279,30 +236,16 @@ img {
   position: left;
 }
 
-.card-title {
-  font-weight: bold;
-  font-size: 18px;
-  color: #000;
-  margin-bottom: 5px 0;
-}
-
 .card-date {
-  color: rgba(0, 0, 0, 0.38);
+  color: #4E5166;
   font-size: 12px;
   padding-left: 15px;
   margin: auto;
   margin-top: -10px;
-
 }
 
-/* CARD BODY */
 .card-body {
   padding: 0 10px;
-}
-
-.card-body p {
-  padding-top: 5px;
-  padding-bottom: 5px;
 }
 
 .card-body a {
@@ -325,6 +268,7 @@ img {
   background: #fbfbfb;
   display: flex;
   padding: 10px;
+  padding-bottom: 10px;
   font-size: 12px;
   color: #dbdbdb;
   justify-content: space-around;

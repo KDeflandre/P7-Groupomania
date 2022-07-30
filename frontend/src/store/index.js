@@ -4,7 +4,7 @@ import router from "../router/index";
 
 export default createStore({
   state: {
-    user: JSON.parse(localStorage.getItem("user")),
+    user: JSON.parse(localStorage.getItem("user")) || {},
     token: localStorage.getItem("token"),
   },
   getters: {
@@ -18,7 +18,7 @@ export default createStore({
       return false
     },
     getUserFirstName(state) {
-      if (state.user.userId ) {
+      if (state.user.userId) {
         return state.user.firstName
       }
       return false
@@ -36,7 +36,7 @@ export default createStore({
       return false
     },
     isAdmin(state) {
-      if (state.user.email && state.token && state.user.isAdmin) {
+      if (state.user.email && state.token && state.user.role) {
         return true
       }
       return false
@@ -87,9 +87,9 @@ export default createStore({
     logout(context) {
       context.commit("removeToken")
       context.commit("removeUser")
-      router.push({ name: "Home" });
+      router.push({ name: "Login" });
     },
-    
+
   },
   modules: {
   }

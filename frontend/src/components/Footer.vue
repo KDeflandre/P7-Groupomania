@@ -1,14 +1,14 @@
 <template>
   <footer>
     <div class="container">
-          <div class="linkFooter">
-          <ul>
-            <router-link class="link" :to="{ name: 'PostPage' }">Accueil</router-link>
-            <router-link class="link" :to="{ name: 'Home' }">Se connecter</router-link>
-            <router-link class="link" :to="{ name: 'SignUp' }">Créer un compte</router-link>
-          </ul>
-          </div>
-        </div>
+      <div class="linkFooter">
+        <ul>
+          <router-link class="link" :to="{ name: 'PostPage' }">Accueil</router-link>
+          <router-link class="link" :to="{ name: 'Login' }">Se connecter</router-link>
+          <router-link class="link" :to="{ name: 'SignUp' }">Créer un compte</router-link>
+        </ul>
+      </div>
+    </div>
   </footer>
 </template>
 
@@ -25,18 +25,20 @@ footer {
   padding: 30px 25px;
   background-color: #303030;
 }
+
 .linkFooter a {
-  padding:10px;
-  margin:auto;
-  color:#fff;
+  padding: 10px;
+  margin: auto;
+  color: #fff;
 }
+
 footer .container {
   display: flex;
   flex-direction: column;
   gap: 32px;
 }
 
-footer .container{
+footer .container {
   gap: 32px;
   color: #fff;
   display: flex;
@@ -49,68 +51,83 @@ footer .container .left .col-2 {
   display: flex;
   flex: 1;
 }
+
 @media (min-width: 800px) {
+
   footer .container .left .col-1,
   footer .container .left .col-2 {
     gap: 0;
   }
 }
+
 footer .container .left .col-1 {
   flex-direction: column;
   align-items: center;
 }
+
 footer .container .left .col-1 h2 {
   text-align: center;
 }
+
 @media (min-width: 800px) {
   footer .container .left .col-1 h2 {
     text-align: initial;
   }
 }
+
 footer .container .left .col-1 ul {
   margin-top: auto;
 }
+
 footer .container .left .col-1 ul li {
   display: flex;
   align-items: center;
 }
+
 footer .container .left .col-1 ul li .svg-icon {
   width: 24px;
   height: auto;
   color: #fff;
 }
+
 footer .container .left .col-2 ul {
   height: 100%;
   justify-content: center;
   flex-direction: row;
   flex-wrap: wrap;
 }
+
 @media (min-width: 800px) {
   footer .container .left .col-2 ul {
     flex-direction: column;
   }
 }
+
 footer .container .left .col-2 ul .link {
   font-size: 16px;
   font-weight: 500;
   color: #fff;
   text-decoration: none;
 }
+
 footer .container .right {
   gap: 32px;
   color: #fff;
   align-items: center;
   flex-direction: column;
 }
+
 @media (min-width: 800px) {
   footer .container .right {
     align-items: flex-end;
     gap: 0;
   }
 }
+
 footer .container p {
   margin-top: auto;
 }
+
 .col-1 .brand {
   width: 40px;
 }
@@ -130,7 +147,4 @@ footer .container p {
     gap: 0;
   }
 }
-
-
-
 </style>

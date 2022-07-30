@@ -24,9 +24,9 @@ exports.findAllPosts = (req, res, next) => {
 
 // Un seul message
 exports.findOnePost = (req, res, next) => {
-  Post.findOne({_id: req.params.id})
-  .then(posts => res.status(200).json(posts))
-  .catch(error => res.status(400).json({error}));  
+  Post.findOne({ _id: req.params.id })
+    .then(posts => res.status(200).json(posts))
+    .catch(error => res.status(400).json({ error }));
 };
 // Créer un post 
 exports.createPost = (req, res, next) => {
@@ -45,72 +45,79 @@ exports.createPost = (req, res, next) => {
 };
 
 // Modifier un message
-exports.modifyPost = (req, res ,next) => {
- const userId = User.userId;
- const isAdmin = User.isAdmin;
-
-  if (userId == Post.userId || isAdmin ) {
-    const postObject = req.file ?
-  {
-    ...req.body.post,
-      imageUrl: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`
+exports.modifyPost = async (req, res, next) => {
+  let post = await Post.findOne({ _id: req.params.id })
+  if (req.auth.userId != post.userId) {
+    let user = await User.findOne({ where: { _id: req.auth.userId } })
+    if (!user.role) return res.status(401).json({ error: 'Utilisateur non autorisé à modifier ce post' })
   }
-  : {...req.body};
 
-  Post.updateOne({_id: req.params.id}, {...postObject, _id: req.params.id})
-  .then(() => res.status(200).json({message: 'Post modifié'}))
-  .catch(error => res.status(400).json({error}));    
-  } else {
-    res.status(401).json({ error: 'Utilisateur non autorisé à modifier ce post' })
-}};
+  const postObject = req.file ?
+    {
+      ...req.body.post,
+      imageUrl: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`
+    }
+    : { ...req.body };
 
-
+  Post.updateOne({ _id: req.params.id }, { ...postObject, _id: req.params.id })
+    .then(() => res.status(200).json({ message: 'Post modifié' }))
+    .catch(error => res.status(400).json({ error }));
+};
 
 // Supprimer un message
-exports.deletePost = (req, res, next) => {
-  Post.findOne({_id: req.params.id})
-  .then(post => {
-      const filename = post.imageUrl.split('/images/')[1];
-      fs.unlink(`images/${filename}`, () => {
-          Post.deleteOne({_id: req.params.id})
-          .then(() => res.status(200).json({message: 'Post supprimé'}))
-          .catch(error => res.status(400).json({error}));  
-      });
-  })
-  .catch(error => res.status(500).json({error}));
+exports.deletePost = async (req, res, next) => {
+  let post = await Post.findOne({ _id: req.params.id })
+  if (req.auth.userId != post.userId) {
+    let user = await User.findOne({ where: { _id: req.auth.userId } })
+    if (!user.role) return res.status(401).json({ error: 'Utilisateur non autorisé à modifier ce post' })
+  }
+
+  // TODO gerer le cas d'un post sans image
+  if (req.file) {
+  const filename = post.imageUrl.split('/images/')[1];
+  fs.unlink(`images/${filename}`, () => {
+    Post.deleteOne({ _id: req.params.id })
+      .then(() => res.status(200).json({ message: 'Post supprimé' }))
+      .catch(error => res.status(400).json({ error }));
+  }); 
+} else {
+  Post.deleteOne({ _id: req.params.id })
+  .then(() => res.status(200).json({ message: 'Post supprimé' }))
+  .catch(error => res.status(400).json({ error }));
+}
 };
 
 // Like un post
-exports.likePost = (req, res, next) => {
+exports.likePost = async (req, res, next) => {
+  let post = await Post.findOne({ _id: req.params.id })
 
   //Recup du post avec params.id
-  Post.findOne({ _id: req.params.id })
-    .then((post) => {
-
-      if (post.usersLiked.includes(req.body.userId)) {
-        // MAJ BDD
-        Post.updateOne(
-          { _id: req.params.id },
-          {
-          $inc: { likes: 1 },
-          $push: { usersLiked : req.body.userId },
-          }
-      )
-      .then(() => res.status(201).json({ message: "Post liké ! " }))
-      .catch((error) => res.status(400).json({ error }));
-        // Supprimer le user de la list des user likeds
-        // décrementer de 1 le nombre de like
-      } else {
-        // MAJ BDD
-        Post.updateOne(
-          { _id: req.params.id },
-          {
-            $inc: { likes: -1 },
-            $push: { usersLiked: req.body.userId },
-          }
-        )
-          .then(() => res.status(201).json({ message: "Post pas liké ! " }))
-          .catch((error) => res.status(400).json({ error }));
+  if (!post.usersLiked.includes(req.auth.userId)) {
+    // MAJ BDD
+    Post.updateOne(
+      { _id: req.params.id },
+      {
+        $inc: { likes: 1 },
+        $push: { usersLiked: req.auth.userId },
       }
-    })
+    )
+      .then(() => res.status(201).json({ message: "Post liké ! " }))
+      .catch((error) => {
+        console.log(error)
+        res.status(400).json({ error })
+      });
+    // Supprimer le user de la list des user likeds
+    // décrementer de 1 le nombre de like
+  } else {
+    // MAJ BDD
+    Post.updateOne(
+      { _id: req.params.id },
+      {
+        $inc: { likes: -1 },
+        $pull: { usersLiked: req.auth.userId },
+      }
+    )
+      .then(() => res.status(201).json({ message: "Post pas liké ! " }))
+      .catch((error) => res.status(400).json({ error }));
+  }
 }

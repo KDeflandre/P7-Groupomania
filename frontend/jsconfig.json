@@ -4,6 +4,8 @@
     "module": "esnext",
     "baseUrl": "./",
     "moduleResolution": "node",
+    "jsx": "preserve",
+    "include": "[...]",
     "paths": {
       "@/*": [
         "src/*"
@@ -15,5 +17,6 @@
       "dom.iterable",
       "scripthost"
     ]
+    
   }
 }

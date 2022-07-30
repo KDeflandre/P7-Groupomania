@@ -12,7 +12,6 @@ router.post("/", auth, multer, postCtrl.createPost);
 router.post('/:id/like', auth, postCtrl.likePost);
 router.put("/:id", auth, multer, postCtrl.modifyPost);
 router.get("/", auth, postCtrl.findAllPosts);
-// router.get("/users/:id", auth, postCtrl.findAllPostsForOne);
 router.get("/:id", auth, postCtrl.findOnePost);
 router.delete("/:id", auth, postCtrl.deletePost);
 
