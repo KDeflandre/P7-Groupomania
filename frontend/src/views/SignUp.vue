@@ -34,7 +34,9 @@
                                 </span>
                             </span>
                         </div>
-
+                        <div class="infoPassword">
+                            <p>Minimum 5 caractères, une lettre minuscule et en majuscule, un chiffre</p>
+                        </div>
                         <h3>Confirmation du mot de passe</h3>
                         <input type="password" v-model="password2" class="password"
                             placeholder="Confirmation mot de passe" required>
@@ -79,20 +81,11 @@ export default {
         toggleShow() {
             this.showPassword = !this.showPassword;
         },
-        // seePassword() {
-        //     if (this.type === "password") {
-        //         this.type = "text";
-        //         this.btnTxt = "Hide Password";
-        //     } else {
-        //         this.type = "password";
-        //         this.btnTxt = "Show Password";
-        //     }
-        // },
-
+      
         sendFormSignup() {
             if (this.prenom == "" || this.nom == "" || this.email == "" || this.password == "") {
-                this.error = true; // Si au moins 1 champ est vide on signal une erreur
-                this.errorMsg = "Merci de remplir tous les champs"; //le message d'erreur
+                this.error = true; 
+                this.errorMsg = "Merci de remplir tous les champs";
             } else if (this.password !== this.password2) {
                 this.error = true;
                 this.errorMsg = "Les mots de passe ne sont pas indentiques";
@@ -121,16 +114,15 @@ body {
     max-width: 1920px;
 }
 
-.buttonP {
-    background: none;
-    color: #FD2D01;
-    position: absolute;
-    left: 780px;
-    top: 675px;
-    right: 0;
-    bottom: 0;
+.signup {
+    display:flex;
+    flex-direction: column;
+    /* align-content: center; */
+    align-items: center;
 }
-
+.signup h1 {
+    padding:20px;
+}
 .btnPassword {
     position: relative;
 }
@@ -143,7 +135,7 @@ label.password {
     bottom: 20px;
     right: 10%;
     position: absolute;
-    width: 50px;
+    width: 0px;
     height: 46px;
     display: flex;
     justify-content: center;
@@ -189,7 +181,7 @@ label.password {
     cursor: pointer;
 }
 
-.login_box,
+/* .login_box,
 .register_box {
     width: 80%;
     margin: 0 auto;
@@ -198,24 +190,28 @@ label.password {
 .login_box,
 .register_box h1 {
     padding-top: 30px;
-}
-
-.connexion p {
-    padding: 0px 52px 0 52px;
-}
-
-/* .formBox {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
 } */
+
+/* .connexion p {
+    padding: 0px 52px 0 52px;
+} */
+.formBox {
+    width:90%;
+}
 .formBox h3 {
     text-align: left;
-    padding-left: 85px;
+    /* padding-left: 85px; */
     margin-bottom: 10px;
-    display: flex;
+    /* display: flex; */
 }
-
+.infoPassword {
+    color: #4E5166;
+    font-weight: 200;
+    font-size: small;
+    text-align: justify;
+    padding-bottom: 20px;
+    padding-left: 15px;
+}
 h1 {
     font-size: 2rem;
     color: #FD2D01;
@@ -223,7 +219,7 @@ h1 {
 }
 
 form input {
-    width: 80%;
+    width: 100%;
     outline: none;
     border: 1px solid #FFD7D7;
     padding: 15px 0;
@@ -268,11 +264,6 @@ a:hover {
     text-decoration: underline;
 }
 
-.post_text,
-.post_media {
-    font-size: 1rem;
-}
-
 .registerArea {
     display: flex;
     justify-content: center;
@@ -289,7 +280,7 @@ a:hover {
 .returnLogin {
     color: #FD2D01;
     font-weight: bold;
-    cursor: pointer;
+    /* cursor: pointer; */
 }
 
 @media screen and (max-width: 1024px) {
@@ -325,10 +316,10 @@ a:hover {
         display: block;
     }
 
-    .login__box,
+    /* .login__box,
     .register_box {
         width: 100%;
-    }
+    } */
 
 }
 </style>

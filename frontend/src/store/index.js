@@ -67,10 +67,13 @@ export default createStore({
         .then((response) => {
           context.commit('updateUser', response.data.user)
           context.commit('updateToken', response.data.token)
-          // this.$router.push({ name: "PostPage" }); //REDIRECT
           router.push({ name: "PostPage" });
         })
-        .catch((err) => {
+        .catch(error => {
+          this.error = true;
+          this.errorMsg = error.response.message;
+          console.log(error.response.data.message);
+
         });
     },
     login(context, data) {

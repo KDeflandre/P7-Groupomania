@@ -5,9 +5,12 @@ const jwt = require("jsonwebtoken");
 
 // Creation d'un nouvel utilisateur
 exports.signup = (req, res, next) => {
-  if (!req.body.password || !req.body.email || !req.body.firstName || !req.body.lastName) return res.status(500).json({ error: "Champs manquants" })
-  // if (!req.body.password.match(/^[Az\d]{5,20}$/g)) return res.status(500).json({ error: "Format de password incorrect" })
-  if (!req.body.email.match(/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/g)) return res.status(500).json({ error: "Format de l'email incorrect" })
+  if (!req.body.password || !req.body.email || !req.body.firstName || !req.body.lastName) 
+  return res.status(500).json({ message: "Champs manquants" })
+  if (!req.body.password.match(/^((?=\S*?[A-Z])(?=\S*?[a-z])(?=\S*?[0-9]).{5,16})\S$/g))
+  return res.status(500).json({ message: "Le mot de passe doit contenir au minimum 5 caractères, une lettre minuscule, une lettre en majuscule et un chiffre" })
+  if (!req.body.email.match(/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/g)) 
+  return res.status(500).json({ message: "Format de l'email incorrect" })
 
   bcrypt.hash(req.body.password, 10)
     .then(hash => {
