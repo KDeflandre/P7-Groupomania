@@ -133,7 +133,7 @@ label.password {
 
 .buttonTxt {
     bottom: 20px;
-    right: 10%;
+    right: 6%;
     position: absolute;
     width: 0px;
     height: 46px;
@@ -171,6 +171,8 @@ label.password {
     text-align: center;
     align-items: center;
     padding: 20px;
+    width: auto;
+    margin: auto;
 }
 
 .login {
@@ -200,9 +202,7 @@ label.password {
 }
 .formBox h3 {
     text-align: left;
-    /* padding-left: 85px; */
     margin-bottom: 10px;
-    /* display: flex; */
 }
 .infoPassword {
     color: #4E5166;
@@ -210,7 +210,7 @@ label.password {
     font-size: small;
     text-align: justify;
     padding-bottom: 20px;
-    padding-left: 15px;
+    margin-top: -10px;
 }
 h1 {
     font-size: 2rem;
@@ -305,11 +305,6 @@ a:hover {
     #logo img {
         width: 300px;
         padding-bottom: 30px;
-    }
-
-    .connexion {
-        width: auto;
-        margin: auto;
     }
 
     .registerArea {

@@ -46,9 +46,13 @@
 
     <div class="modal" v-if="showModal">
       <div class="main">
-        <img src="../../public/assets/close.svg" Close class="icon-close" @click="showModal = false" />
+       
         <header class="modal-header">
+        
           <h2>Modifier la publication</h2>
+           <span class="iconClose">
+        <img src="../../public/assets/close.svg" Close class="icon-close" @click="showModal = false" />
+        </span>
         </header>
         <section class="modal-body">
           <textarea v-model="post.content" id="content" type="text" :placeholder="`Publication`" />
@@ -180,7 +184,20 @@ button.active {
   box-shadow: 0 4px 6px -1px rgb(0 0 0 / 10%), 0 2px 4px -1px rgb(0 0 0 / 6%);
   margin:40px;
 }
-
+@media only screen and (max-width: 1050px) {
+  .card{
+    margin-bottom: 20px;
+  }
+  .modal .main {
+    width: 60%;
+  }
+}
+  @media only screen and (max-width: 750px) {
+  .card{
+    margin-right: 0;
+    margin-left: 0;
+  }
+}
 img {
   display: flex;
   align-items: center;
@@ -274,6 +291,26 @@ button.delete:hover {
   justify-content: space-around;
   border-bottom: solid 1px #dbdbdb;
 }
+@media only screen and (max-width: 750px) {
+  .card-footer button {
+    background-color: transparent;
+    color:#FD2D01;
+    padding:12px 17px;
+    font-size: medium;
+  }
+
+  .card-footer button:hover {
+  color: rgba(48, 48, 48, 0.7);
+}
+button.active {
+  color: #4E5166;
+  display: flex;
+  align-items: center;
+}
+.fa.fa-thumbs-o-up {
+  padding:5px
+}
+}
 
 .card-footer div {
   display: flex;
@@ -288,152 +325,26 @@ button.delete:hover {
   text-decoration: underline;
   cursor: pointer;
 }
-
-/*ASIDE*/
-aside p {
-  margin-top: 0;
+/* Modal part */
+.iconClose {
+  width: 6%;
+  cursor: pointer;
 }
-
-.bio {
-  display: none;
-}
-
-/*ASIDE SUGGESTION FRIEND*/
-.sidebar-title {
-  margin-top: 30px;
-  margin-bottom: 20px;
-  font-weight: bold;
-  color: #000;
-  font-size: 15px;
-}
-
-.sidebar-title::after {
-  content: "";
-  display: block;
-  height: 1px;
-  width: 100%;
-  margin-top: 4px;
-  background: #000;
-}
-
-.friend {
-  margin: 14px 0;
-  display: flex;
-}
-
-.friend-body {
-  display: flex;
-  flex-direction: column;
-}
-
-.friend-avatar {
-  width: 70px;
-  height: 70px;
-  margin-right: 10px;
-  flex: none;
-}
-
-.friend-avatar {
-  display: block;
-  font-weight: bold;
-  color: #000;
-}
-
-.friend-name {
-  display: block;
-  font-weight: bold;
-  color: #000;
-  font-size: 15px;
-  margin-bottom: 2px;
-}
-
-.friend-common {
-  color: rgba(0, 0, 0, 0.38);
-  font-size: 12px;
-}
-
-.friend-add {
-  display: flex;
-  font-size: 12px;
-  color: #000;
-  margin-top: auto;
-}
-
-.add-icon {
-  padding-left: 5px;
-}
-
-.edit {
-  text-decoration: none;
-}
-
-.edit span {
-  padding-left: 5px;
-  color: #000;
-}
-
-.edit:hover {
-  color: #000;
-  font-weight: 600;
-  text-decoration: underline;
-}
-
-.container {
-  max-width: 1080px;
-  margin-left: auto;
-  margin-right: auto;
-}
-
-.welcome {
-  font-size: large;
-  display: flex;
-}
-
-.header-btn {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-button.onPage {
-  width: 20%;
-  margin-bottom: 30px;
-  padding: 15px;
-  border-radius: 10px;
-}
-
-.userWelcome {
-  font-weight: bold;
-  padding-left: 7px;
-  color: #FD2D01;
-}
-
-.site {
-  margin-top: 20px;
-  margin-bottom: 20px;
-}
-
-.main {
-  margin-bottom: 20px;
-}
-
-@media only screen and (min-width: 1050px) {
-  .site {
-    display: flex;
-  }
-
-  .main {
-    width: 100%;
-    margin-left: 30px;
-    margin-right: 30px;
-  }
-
-  .aside {
-    flex: none;
-    width: 310px;
+@media only screen and (max-width: 1200px){
+  .iconClose {
+    width:8%;
   }
 }
-
+  @media only screen and (max-width: 900px){
+  .iconClose {
+    width:8%;
+  }
+}
+ @media only screen and (max-width: 800px){
+  .iconClose {
+    width:8%;
+  }
+}
 .modal {
   display: flex;
   justify-content: center;
@@ -446,9 +357,10 @@ button.onPage {
   left: 0;
   background-color: rgba(0, 0, 0, 0.4);
 }
-
-.addImage {
-  text-transform: none;
+.modal-header {
+  display:flex;
+  align-items: center;
+  justify-content: space-between;
 }
 
 .btn-image {
@@ -460,12 +372,11 @@ button.onPage {
   color: #fff;
   border-radius: 20px;
   border: none;
+  text-transform: uppercase;
+  font-size: small;
 }
 
 #inputImage {
-  /* visibility: hidden;
-  width:0;
-  height: 0; */
   display: none;
 }
 
@@ -474,17 +385,42 @@ button.onPage {
   justify-content: space-between;
 }
 
-.main {
+.modal .main {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
   border-radius: 8px;
-  width: 800px;
-  min-height: 500px;
   padding: 40px 30px;
   background-color: #fff;
   position: relative;
+  width: 55%;
+  height: 55%;
 }
+@media only screen and (max-width: 900px){
+  .modal .main{
+    width: 75%;
+  }
+}
+@media only screen and (max-width: 750px){
+  .modal .main{
+    width: 100%;
+  }
+  /* .btn-image {
+    color:#FD2D01;
+    background-color: transparent;
+  } */
+    /* .btn-image:hover {
+  color: rgba(48, 48, 48, 0.7); */
+}
+  /* .footer-btn button {
+    background-color: transparent;
+    color:#FD2D01;
+  } */
+
+  /* .footer-btn button:hover {
+  color: rgba(48, 48, 48, 0.7);
+} */
+/* } */
 
 .main a {
   position: absolute;
@@ -513,23 +449,10 @@ button.onPage {
   padding: 50px;
 }
 
-.icon {
-  width: 35px;
-  height: auto;
-}
-
 .modal-file {
   display: flex;
   justify-content: center;
   align-items: center;
-}
-
-.icon-close {
-  width: 35px;
-  height: auto;
-  position: relative;
-  top: -15px;
-  left: 710px;
 }
 
 .modal-file p {
@@ -543,18 +466,13 @@ input#file {
 
 textarea {
   border: none;
-  background-color: #f2f7f6;
+  background-color: #FFD7D7;
   width: 100%;
   padding: 5px 5px 5px 20px;
   max-height: 250px;
   outline: none;
   resize: none;
   height: auto;
-}
-
-.close:hover {
-  cursor: pointer;
-  fill: rgba(48, 48, 48, 0.7);
 }
 
 footer {

@@ -56,8 +56,8 @@ export default {
 }
 
 #app {
-  display: flex;
-  flex-direction: column;
+  /* display: flex;
+  flex-direction: column; */
   min-height: 100vh;
   width: 100%;
 }
@@ -113,27 +113,6 @@ button:focus,
 button:hover,
 .router-button:hover {
   background-color: rgba(48, 48, 48, 0.7);
-}
-
-.button-ghost {
-  color: #000;
-  padding: 0;
-  border-radius: 0;
-  margin-top: 50px;
-  font-size: 15px;
-  font-weight: 500;
-  background-color: transparent;
-}
-
-@media (min-width: 700px) {
-  .button-ghost {
-    margin-top: 0;
-    margin-left: auto;
-  }
-}
-
-.button-ghost i {
-  margin-left: 8px;
 }
 
 .button-light {

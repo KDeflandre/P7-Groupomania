@@ -10,9 +10,12 @@
       </div>
       <div class="modal" v-if="showModal">
         <div class="main">
-          <img src="../../public/assets/close.svg" Close class="icon-close" @click="closeModal" />
-          <header class="modal-header">
+         
+          <header class="modal-header"> 
             <h2>Créer une publication</h2>
+            <span class="iconClose">
+             <img src="../../public/assets/close.svg" Close class="icon-close" @click="closeModal" />
+             </span>
           </header>
           <section class="modal-body">
             <textarea v-model="content" id="content" type="text" :placeholder="`Publication`" />
@@ -113,9 +116,15 @@ export default {
   margin-right: auto;
 }
 
+.site {
+  display: flex;
+  justify-content: center;
+}
+
 .welcome {
   font-size: large;
   display: flex;
+  margin:20px;
 }
 
 .header-btn {
@@ -125,10 +134,10 @@ export default {
 }
 
 button.onPage {
-  width: 20%;
   margin-bottom: 30px;
   padding: 15px;
   border-radius: 10px;
+  margin:20px;
 }
 
 .userWelcome {
@@ -142,19 +151,20 @@ button.onPage {
   margin-bottom: 20px;
 }
 
-.main {
-  margin-bottom: 20px;
-}
-
 @media only screen and (min-width: 1050px) {
   .site {
     display: flex;
   }
 
   .main {
+    display:flex;
+    flex-direction: column;
+    justify-content: space-between;
     width: 100%;
     margin-left: 30px;
     margin-right: 30px;
+    margin-bottom: 20px
+
   }
 
   .aside {
@@ -162,7 +172,7 @@ button.onPage {
     width: 310px;
   }
 }
-
+/* Modal part */
 .modal {
   display: flex;
   justify-content: center;
@@ -175,10 +185,30 @@ button.onPage {
   left: 0;
   background-color: rgba(0, 0, 0, 0.4);
 }
-
-.addImage {
-  text-transform: none;
+.modal-header {
+  display:flex;
+  align-items: center;
+  justify-content: space-between;
 }
+.iconClose {
+  width: 6%;
+  cursor: pointer;
+}
+@media only screen and (max-width: 1200px){
+  .iconClose {
+    width:8%;
+  }
+}
+  @media only screen and (max-width: 900px){
+  .iconClose {
+    width:8%;
+  }
+}
+ @media only screen and (max-width: 800px){
+  .iconClose {
+    width:8%;
+  }
+ }
 
 .btn-image {
   transition: 500ms ease all;
@@ -189,6 +219,8 @@ button.onPage {
   color: #fff;
   border-radius: 20px;
   border: none;
+  text-transform: uppercase;
+  font-size: small;
 }
 
 #inputImage {
@@ -203,16 +235,27 @@ button.onPage {
   justify-content: space-between;
 }
 
-.main {
+.modal .main {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
   border-radius: 8px;
-  width: 800px;
-  min-height: 500px;
   padding: 40px 30px;
   background-color: #fff;
   position: relative;
+  width: 55%;
+  height: 55%;
+}
+@media only screen and (max-width:900px){
+  .modal .main {
+    width:75%;
+  }
+  
+}
+@media only screen and (max-width: 750px)  {
+  .modal .main{
+    width:100%;
+  }
 }
 
 .main a {
@@ -252,15 +295,6 @@ button.onPage {
   justify-content: center;
   align-items: center;
 }
-
-.icon-close {
-  width: 35px;
-  height: auto;
-  position: relative;
-  top: -15px;
-  left: 710px;
-}
-
 .modal-file p {
   padding-bottom: 10px;
 }
@@ -272,7 +306,7 @@ input#file {
 
 textarea {
   border: none;
-  background-color: #f2f7f6;
+  background-color:#FFD7D7;
   width: 100%;
   padding: 5px 5px 5px 20px;
   max-height: 250px;
@@ -280,14 +314,29 @@ textarea {
   resize: none;
   height: auto;
 }
-
-.close:hover {
-  cursor: pointer;
-  fill: rgba(48, 48, 48, 0.7);
+img {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  object-fit: cover;
+  width: 100%;
+  max-height: 300px;
 }
 
 footer {
   display: flex;
   justify-content: space-around;
 }
+@media only screen and (max-width: 750px) {
+.header-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+  .onPage {
+    width: 70%;
+  }
+}
+
+
 </style>

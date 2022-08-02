@@ -86,10 +86,6 @@ header {
   z-index: 99;
 }
 
-a.header {
-  width: 500px;
-}
-
 header nav {
   display: flex;
   padding: 20px;
@@ -98,17 +94,7 @@ header nav {
 header nav .branding {
   display: flex;
   align-items: center;
-  width: auto;
-  height: auto;
-}
-
-header nav .branding .header {
-  font-weight: 600;
-  font-size: 24px;
-  color: #000;
-  text-decoration: none;
-  display: flex;
-  align-items: center;
+  justify-content: center;
 }
 
 #logo {
@@ -133,11 +119,23 @@ header nav .nav-links {
 }
 
 @media (max-width: 750px) {
-  header nav .nav-links {
-    padding-right: 50px;
+  .onPage2 {
+    display: none;
+  }
+  .logout {
+    background-color: inherit;
+    color:#FD2D01;
+    padding-bottom: 40px;
+    padding: 12px 0px;
+  }
+  .branding {
+    padding-bottom: 30px;
+  }
+  .container {
+    flex-direction: column-reverse;
+    padding:5px;
   }
 }
-
 header nav .nav-links ul {
   margin-right: 30px;
 }

@@ -84,7 +84,10 @@ export default createStore({
           context.commit("updateToken", response.data.token)
           router.push({ name: "PostPage" });
         })
-        .catch((err) => {
+        .catch((error) => {
+          this.error = true;
+          this.errorMsg = error.response.message;
+          console.log(error.response.data.message);
         });
     },
     logout(context) {

@@ -82,6 +82,16 @@ body {
     max-width: 1920px;
 }
 
+.login {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.formBox{
+    width: 90%;
+}
+
 .picture img {
     max-height: 100vh;
     max-width: 100%;
@@ -116,6 +126,8 @@ body {
     text-align: center;
     align-items: center;
     padding: 20px;
+    width: auto;
+    margin: auto;
 }
 
 .btnHome {
@@ -126,31 +138,14 @@ body {
     cursor: pointer;
 }
 
-.login_box,
-.register_box {
-    width: 80%;
-    margin: 0 auto;
-}
-
-.login_box,
-.register_box h1 {
-    padding-top: 30px;
-}
-
 .connexion p {
-    padding: 0px 52px 0 52px;
+    padding: 25px 52px 40px 52px;
 }
 
-/* .formBox {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-} */
 .formBox h3 {
     text-align: left;
-    padding-left: 85px;
     margin-bottom: 10px;
-    display: flex;
+    
 }
 
 h1 {
@@ -160,7 +155,7 @@ h1 {
 }
 
 form input {
-    width: 80%;
+    width: 100%;
     outline: none;
     border: 1px solid #FFD7D7;
     padding: 15px 0;
@@ -205,11 +200,6 @@ a:hover {
     text-decoration: underline;
 }
 
-.post_text,
-.post_media {
-    font-size: 1rem;
-}
-
 .registerArea {
     display: flex;
     justify-content: center;
@@ -220,12 +210,6 @@ a:hover {
     padding-right: 6px;
 }
 
-.signup,
-.returnLogin {
-    color: #FD2D01;
-    font-weight: bold;
-    cursor: pointer;
-}
 
 @media screen and (max-width: 1024px) {
 
@@ -258,11 +242,6 @@ a:hover {
 
     .registerArea {
         display: block;
-    }
-
-    .login__box,
-    .register_box {
-        width: 100%;
     }
 
 }
