@@ -27,16 +27,8 @@ const routes = [
       requireNotLoggedIn: true
     }
   },
-  {
-    path: '/post/edit/:id',
-    name: 'EditPost',
-    component: () => import("../views/EditPost.vue"),
-    meta: {
-      requireLogin: true
-    }
-  },
 ]
-
+// Return sur les bonne pages en fonction de si nous sommes log ou pas 
 const router = createRouter({
   history: createWebHistory(process.env.BASE_URL),
   routes

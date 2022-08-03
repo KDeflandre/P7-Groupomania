@@ -26,9 +26,6 @@
                     </form>
                     <div class="registerArea">
                         <div class="txtRegister">Vous n'avez pas de compte ?</div>
-                        <!-- <div class="signup" @click="page = 'signup'">
-                        Créer un compte
-                    </div> -->
                         <router-link class="signup" :to="{ name: 'SignUp' }">Créer un compte</router-link>
                     </div>
                 </div>

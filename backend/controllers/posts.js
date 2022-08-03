@@ -71,8 +71,6 @@ exports.deletePost = async (req, res, next) => {
     let user = await User.findOne({ where: { _id: req.auth.userId } })
     if (!user.role) return res.status(401).json({ error: 'Utilisateur non autorisé à modifier ce post' })
   }
-
-  // TODO gerer le cas d'un post sans image
   if (req.file) {
   const filename = post.imageUrl.split('/images/')[1];
   fs.unlink(`images/${filename}`, () => {
@@ -106,8 +104,6 @@ exports.likePost = async (req, res, next) => {
         console.log(error)
         res.status(400).json({ error })
       });
-    // Supprimer le user de la list des user likeds
-    // décrementer de 1 le nombre de like
   } else {
     // MAJ BDD
     Post.updateOne(

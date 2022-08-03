@@ -117,7 +117,6 @@ body {
 .signup {
     display:flex;
     flex-direction: column;
-    /* align-content: center; */
     align-items: center;
 }
 .signup h1 {
@@ -183,20 +182,6 @@ label.password {
     cursor: pointer;
 }
 
-/* .login_box,
-.register_box {
-    width: 80%;
-    margin: 0 auto;
-}
-
-.login_box,
-.register_box h1 {
-    padding-top: 30px;
-} */
-
-/* .connexion p {
-    padding: 0px 52px 0 52px;
-} */
 .formBox {
     width:90%;
 }
@@ -310,11 +295,6 @@ a:hover {
     .registerArea {
         display: block;
     }
-
-    /* .login__box,
-    .register_box {
-        width: 100%;
-    } */
 
 }
 </style>

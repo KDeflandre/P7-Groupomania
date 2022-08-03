@@ -2,12 +2,13 @@
   <footer>
     <div class="container">
       <div class="linkFooter">
-        <ul>
+        <!-- <ul>
           <router-link class="link" :to="{ name: 'PostPage' }">Accueil</router-link>
           <router-link class="link" :to="{ name: 'Login' }">Se connecter</router-link>
           <router-link class="link" :to="{ name: 'SignUp' }">Créer un compte</router-link>
-        </ul>
+        </ul> -->
       </div>
+     <p> @ Copyright GROUPOMANIA 2022</p>
     </div>
   </footer>
 </template>

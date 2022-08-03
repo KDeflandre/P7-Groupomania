@@ -65,7 +65,7 @@
                 {{ post.imageUrl ? "Modifier l'image" : "Ajouter une image" }}
               </label>
             </div>
-            {{ imageName }}
+            <p class="imageName">{{ imageName }}</p>
             <input type="file" @change="selectFile" ref="image" id="inputImage" name="inputImage"
               aria-describedby="image" accept=".jpg, .jpeg, .gif, .png" />
           </section>
@@ -147,8 +147,6 @@ export default {
       }
     },
 
-    // like les posts 
-
     likePost() {
       this.submitted = true;
       axios
@@ -205,6 +203,10 @@ img {
   object-fit: cover;
   width: 100%;
   max-height: 300px;
+}
+.imageName {
+  margin-top:30px;
+  padding-left: 15px;
 }
 
 .infos-user {
