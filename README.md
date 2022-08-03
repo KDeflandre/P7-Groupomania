@@ -15,6 +15,7 @@ Parcours développeur web de chez Openclassrooms
 * Install node.js
 * cd backend
 * Install all the packages : nodemon, express.js, multer, fs, body-parser, dotenv, mongoose, unique validator, bcrypt, jsonwebtoken
+* Complete the .env file
 * Start nodemon server
 
 ## Frontend
