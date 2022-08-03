@@ -56,6 +56,7 @@
         </header>
         <section class="modal-body">
           <textarea v-model="post.content" id="content" type="text" :placeholder="`Publication`" />
+          <div class="errorContent" v-if="error">{{ error }}</div>
         </section>
 
         <div class="footer-btn">
@@ -91,7 +92,8 @@ export default {
       image: "",
       imageUrl: "",
       role: "",
-      post: {}
+      post: {},
+      error:false,
     }
   },
 
@@ -112,6 +114,8 @@ export default {
     },
 
     editPublication() {
+      this.error = false
+      if (this.post.content.trim() === "") return this.error = "Pas de contenu !"
       const formData = new FormData();
       formData.append("image", this.image);
       formData.append("content", this.post.content);
@@ -231,6 +235,15 @@ img {
   padding: 20px;
   padding-top: 30px;
 }
+
+.errorContent {
+  padding:10px;
+  font-size: large;
+  color:#FD2D01;
+  display: flex;
+  justify-content: center;
+}
+
 button.delete:hover {
   cursor: pointer;
   fill: red;
@@ -377,6 +390,9 @@ button.active {
   text-transform: uppercase;
   font-size: small;
 }
+.btn-image-label {
+  cursor: pointer;
+}
 
 #inputImage {
   display: none;
@@ -444,11 +460,13 @@ button.active {
 
 .modal-body {
   display: flex;
+  flex-direction: column;
   padding: 15px 0;
 }
 
 .modal-body #content {
-  padding: 50px;
+  padding: 20px;
+  min-height: 150px;
 }
 
 .modal-file {
@@ -468,13 +486,14 @@ input#file {
 
 textarea {
   border: none;
-  background-color: #FFD7D7;
+  background-color: #ebe8e8;
   width: 100%;
   padding: 5px 5px 5px 20px;
   max-height: 250px;
   outline: none;
   resize: none;
   height: auto;
+  white-space: pre-line;
 }
 
 footer {

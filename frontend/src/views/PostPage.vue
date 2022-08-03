@@ -19,6 +19,7 @@
           </header>
           <section class="modal-body">
             <textarea v-model="content" id="content" type="text" :placeholder="`Publication`" />
+            <div class="errorContent" v-if="error">{{ error }}</div>
           </section>
 
           <div class="footer-btn">
@@ -62,6 +63,7 @@ export default {
       posts: [],
       firstName: this.$store.getters.getUserFirstName,
       lastName: this.$store.getters.getUserInfos,
+      error:false,
     }
   },
   methods: {
@@ -72,9 +74,13 @@ export default {
         })
         .then((response) => {
           this.posts = response.data.posts;
+          
         })
         .catch((error) => {
           console.log(error);
+          if (error.response.status === 401) {
+          this.$store.dispatch("logout")
+          }
         });
     },
     selectFile() {
@@ -91,6 +97,8 @@ export default {
     
     // Création d'une publication
     postPublication() {
+      this.error = false
+      if(this.content.trim() === "") return this.error = "Pas de contenu !"
       const formData = new FormData();
       formData.append("image", this.image);
       formData.append("userId", this.$store.getters.getUserId);
@@ -152,6 +160,13 @@ button.onPage {
 .site {
   margin-top: 20px;
   margin-bottom: 20px;
+}
+.errorContent {
+  padding:10px;
+  font-size: large;
+  color:#FD2D01;
+  display: flex;
+  justify-content: center;
 }
 
 @media only screen and (min-width: 1050px) {
@@ -226,6 +241,10 @@ button.onPage {
   font-size: small;
 }
 
+.btn-image-label {
+  cursor: pointer;
+}
+
 #inputImage {
   /* visibility: hidden;
   width:0;
@@ -281,11 +300,14 @@ button.onPage {
 
 .modal-body {
   display: flex;
+  flex-direction: column;
   padding: 15px 0;
 }
 
 .modal-body #content {
-  padding: 50px;
+  padding: 20px;
+  min-height: 150px;
+  margin-bottom: 20px;
 }
 
 .icon {
@@ -309,13 +331,14 @@ input#file {
 
 textarea {
   border: none;
-  background-color:#FFD7D7;
+  background-color:#ebe8e8;
   width: 100%;
   padding: 5px 5px 5px 20px;
   max-height: 250px;
   outline: none;
   resize: none;
   height: auto;
+  white-space: pre-line;
 }
 img {
   display: flex;

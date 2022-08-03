@@ -28,11 +28,13 @@ exports.findOnePost = (req, res, next) => {
     .then(posts => res.status(200).json(posts))
     .catch(error => res.status(400).json({ error }));
 };
+
 // Créer un post 
 exports.createPost = (req, res, next) => {
   const postObject = req.body;
+if (postObject.content.trim()=== "") return res.status(400).json({error: "Rien à publier"})
   let newPost = {
-    userId: postObject.userId,
+    userId: req.auth.userId,
     content: postObject.content,
   }
   if (req.file) {
@@ -44,13 +46,14 @@ exports.createPost = (req, res, next) => {
     .catch(error => res.status(400).json({ error: "Rien à publier" }));
 };
 
-// Modifier un message
+// Modifier un post
 exports.modifyPost = async (req, res, next) => {
   let post = await Post.findOne({ _id: req.params.id })
   if (req.auth.userId != post.userId) {
     let user = await User.findOne({ where: { _id: req.auth.userId } })
     if (!user.role) return res.status(401).json({ error: 'Utilisateur non autorisé à modifier ce post' })
   }
+  if(req.body.content.trim() === "") return res.status(400).json({error: "Rien à publier"})
 
   const postObject = req.file ?
     {
@@ -58,13 +61,12 @@ exports.modifyPost = async (req, res, next) => {
       imageUrl: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`
     }
     : { ...req.body };
-
   Post.updateOne({ _id: req.params.id }, { ...postObject, _id: req.params.id })
     .then(() => res.status(200).json({ message: 'Post modifié' }))
     .catch(error => res.status(400).json({ error }));
 };
 
-// Supprimer un message
+// Supprimer un post
 exports.deletePost = async (req, res, next) => {
   let post = await Post.findOne({ _id: req.params.id })
   if (req.auth.userId != post.userId) {
