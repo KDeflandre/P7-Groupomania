@@ -65,7 +65,6 @@ footer .container ul .link {
   footer .container ul .link {
     font-size: 11px ;
   }
-
 }
 footer .container p {
   margin-top: auto;
